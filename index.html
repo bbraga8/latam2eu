@@ -3,469 +3,448 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Latam2EU — Inteligência de Mercado Estratégica</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+    <title>Latam2EU — Inteligência de Mercado 1 de Maio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --navy-dark: #020817;
-            --navy-deep: #051128;
+            --navy: #020C1E;
             --blue-deep: #001A5C;
             --eu-blue: #003399;
             --yellow: #FFCC00;
-            --yellow-glow: rgba(255, 204, 0, 0.4);
+            --yellow-warm: #FFD966;
             --white: #FFFFFF;
-            --slate-400: #94A3B8;
-            --slate-300: #CBD5E1;
-            --glass: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
-            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            --slate: #6B84A3;
+            --blue-ice: #B8D4F5;
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin:0; padding:0; box-sizing:border-box; }
         html { scroll-behavior: smooth; }
         body { 
             font-family: 'DM Sans', sans-serif; 
-            background: var(--navy-dark); 
+            background: var(--navy); 
             color: var(--white); 
             overflow-x: hidden;
             line-height: 1.6;
         }
 
-        /* --- NAVIGATION --- */
+        /* ── NAVIGATION ── */
         nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 1.2rem 5vw;
-            background: rgba(2, 8, 23, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
+            position: fixed; top:0; left:0; right:0; z-index:200;
+            display:flex; align-items:center; justify-content:space-between;
+            padding: 1rem 4vw;
+            background: rgba(2, 12, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 204, 0, 0.1);
         }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; letter-spacing: 1px; color: var(--white); }
-        .logo span { color: var(--yellow); }
-        .nav-links { display: flex; gap: 2rem; align-items: center; }
-        .nav-links a { color: var(--slate-300); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: var(--transition); }
-        .nav-links a:hover { color: var(--yellow); }
-        .btn-cta {
-            background: var(--yellow); 
-            color: var(--blue-deep); /* Alterado para azul escuro conforme solicitado */
-            padding: 0.7rem 1.5rem; border-radius: 6px;
-            font-weight: 800; text-transform: uppercase; font-size: 0.85rem;
-            text-decoration: none; transition: var(--transition);
+        .logo-text { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--white); letter-spacing: 1px; }
+        .logo-text span { color: var(--yellow); }
+        .nav-cta {
+            background: var(--yellow); color: #0A1628;
+            padding: 0.6rem 1.4rem; border-radius: 8px;
+            font-weight: 700; text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            transition: var(--transition);
         }
-        .btn-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 20px var(--yellow-glow); background: var(--white); }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(255, 204, 0, 0.3); }
 
-        /* --- HERO --- */
+        /* ── HERO ── */
         .hero {
             position: relative;
             min-height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 120px 5vw 80px;
+            padding: 120px 5vw 60px;
+            background: radial-gradient(circle at center, #05122b 0%, #020C1E 100%);
             overflow: hidden;
         }
 
-        .hero-bg {
-            position: absolute; inset: 0; z-index: 1;
-            background: radial-gradient(circle at 50% 50%, #0a1931 0%, var(--navy-dark) 100%);
+        /* ── HERO MAP (SVG Integration) ── */
+        .hero-map-container {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .map-svg {
+            width: 100%;
+            height: 100%;
+            max-width: 1400px;
         }
 
-        .map-container {
-            position: absolute; inset: 0; z-index: 2; opacity: 0.4;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .hero-content { position: relative; z-index: 10; max-width: 1100px; }
 
-        .hero-content { position: relative; z-index: 10; max-width: 1000px; }
-        .badge {
-            display: inline-block;
-            padding: 6px 16px;
-            background: rgba(255, 204, 0, 0.1);
-            border: 1px solid var(--yellow);
-            color: var(--yellow);
-            border-radius: 100px;
-            font-family: 'Bebas Neue';
-            font-size: 1.1rem;
-            letter-spacing: 2px;
-            margin-bottom: 2rem;
+        .treaty-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            color: var(--white);
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            opacity: 0.6;
             text-transform: uppercase;
         }
 
+        .urgency-label {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--yellow);
+            letter-spacing: 6px;
+            margin-bottom: 1.5rem;
+            animation: pulseText 2s infinite;
+        }
+        @keyframes pulseText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
         h1 {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(4rem, 12vw, 8.5rem);
-            line-height: 0.9;
-            margin-bottom: 1.5rem;
-            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5));
+            font-size: clamp(3.5rem, 12vw, 10rem);
+            line-height: 0.85;
+            margin-bottom: 2rem;
+            text-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
         h1 span { color: var(--yellow); }
 
-        .hero-sub {
-            font-size: clamp(1.1rem, 2vw, 1.4rem);
-            color: var(--slate-300);
-            max-width: 750px;
-            margin: 0 auto 3.5rem;
-            font-weight: 400;
+        .hero-description {
+            color: var(--blue-ice); 
+            font-size: 1.5rem; 
+            max-width: 800px; 
+            margin: 0 auto 3.5rem; 
+            font-weight: 300; 
+            opacity: 0.9;
         }
 
-        /* --- COUNTDOWN --- */
-        .countdown {
-            display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 4rem;
-        }
-        .cd-item {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 1.5rem;
-            min-width: 110px;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            transition: var(--transition);
-        }
-        .cd-item:hover { border-color: var(--yellow); background: rgba(255,204,0,0.02); }
-        .cd-val { font-family: 'Bebas Neue'; font-size: 3.5rem; color: var(--white); display: block; line-height: 1; }
-        .cd-label { font-size: 0.75rem; color: var(--slate-400); text-transform: uppercase; letter-spacing: 2px; }
-
-        /* --- PARTNERS --- */
-        .partners {
-            padding: 40px 5vw;
-            border-top: 1px solid var(--glass-border);
-            border-bottom: 1px solid var(--glass-border);
-            background: rgba(255,255,255,0.01);
+        .countdown-grid {
             display: flex;
+            gap: 1.2rem;
+            margin-bottom: 4rem;
             justify-content: center;
-            gap: 4rem;
-            flex-wrap: wrap;
-            opacity: 0.6;
         }
-        .partner-logo { font-family: 'Bebas Neue'; font-size: 1.5rem; color: var(--slate-300); filter: grayscale(1); }
+        .timer-box {
+            background: rgba(2, 12, 30, 0.6);
+            border: 1px solid rgba(255, 204, 0, 0.3);
+            padding: 1.5rem;
+            min-width: 120px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .timer-num { font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--white); display: block; line-height: 1; }
+        .timer-label { font-size: 0.8rem; color: var(--yellow); text-transform: uppercase; letter-spacing: 2px; margin-top: 5px; display: block; }
 
-        /* --- STATS SECTION --- */
-        .stats-grid {
-            padding: 100px 5vw;
+        /* ── IMPACT SECTION ── */
+        .impact-section {
+            padding: 80px 6vw;
+            background: #000;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .stat-card {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 3rem 2rem;
-            border-radius: 24px;
-            text-align: left;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
             position: relative;
-            overflow: hidden;
+            z-index: 10;
         }
-        .stat-card::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--yellow);
-        }
-        .stat-num { font-family: 'Bebas Neue'; font-size: 5rem; color: var(--yellow); line-height: 1; margin-bottom: 1rem; }
-        .stat-title { font-weight: 700; font-size: 1.2rem; margin-bottom: 0.5rem; }
-        .stat-desc { color: var(--slate-400); font-size: 0.95rem; }
+        .impact-card { border-left: 1px solid rgba(255, 204, 0, 0.5); padding-left: 2rem; text-align: left; }
+        .impact-val { font-family: 'Bebas Neue'; font-size: 4.5rem; color: var(--yellow); line-height: 1; }
+        .impact-title { font-weight: 700; color: var(--white); margin: 5px 0; text-transform: uppercase; letter-spacing: 1px; }
+        .impact-desc { color: var(--slate); font-size: 0.95rem; }
 
-        /* --- DATA BARS --- */
-        .data-section { padding: 120px 5vw; background: #010612; }
-        .section-header { text-align: center; max-width: 800px; margin: 0 auto 80px; }
-        .section-header h2 { font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 1rem; }
+        /* ── STACKED BARS SECTION ── */
+        .sectors-section { padding: 120px 6vw; background: #010612; }
+        .sectors-container { max-width: 1000px; margin: 0 auto; }
         
-        .chart-container { max-width: 900px; margin: 0 auto; }
-        .chart-row { margin-bottom: 3.5rem; }
-        .chart-label { display: flex; justify-content: space-between; font-family: 'Bebas Neue'; font-size: 1.5rem; margin-bottom: 12px; color: var(--slate-300); }
-        .bar-bg {
-            height: 50px; background: rgba(255,255,255,0.03); border-radius: 12px;
-            display: flex; overflow: hidden; border: 1px solid var(--glass-border);
+        .sector-item { margin-bottom: 4rem; }
+        .sector-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-family: 'Bebas Neue'; letter-spacing: 1px; font-size: 1.6rem; }
+        
+        .bar-wrapper {
+            height: 65px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 14px;
+            display: flex;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .bar-fill {
-            height: 100%; display: flex; align-items: center; padding: 0 20px;
-            font-weight: 700; font-size: 0.85rem; width: 0; transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
-            white-space: nowrap;
-        }
-        .bar-current { background: #1e293b; color: var(--slate-400); }
-        .bar-target { background: linear-gradient(90deg, #FFCC00, #FF9900); color: #000; }
+        .bar-segment { height: 100%; display: flex; align-items: center; justify-content: flex-start; padding-left: 20px; font-weight: 700; font-size: 0.9rem; transition: var(--transition); width: 0; white-space: nowrap; }
+        .bar-2025 { background: #1A3560; color: rgba(255,255,255,0.6); }
+        .bar-2026 { background: linear-gradient(90deg, var(--yellow), #FFAA00); color: #000; font-weight: 800; }
 
-        /* --- FEATURES / NICHES --- */
-        .features {
-            padding: 100px 5vw;
+        .legend { display: flex; gap: 30px; justify-content: center; margin-bottom: 60px; }
+        .legend-item { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--slate); }
+        .dot { width: 12px; height: 12px; border-radius: 3px; }
+
+        /* ── NICHES GRID ── */
+        .niches-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-            max-width: 1200px;
-            margin: 0 auto;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem;
+            margin-top: 6rem;
         }
-        .feat-card {
-            border-radius: 20px; overflow: hidden;
-            background: var(--navy-deep);
-            border: 1px solid var(--glass-border);
+        .niche-card {
+            background: #020C1E;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
             transition: var(--transition);
         }
-        .feat-card:hover { transform: translateY(-10px); border-color: var(--yellow); box-shadow: 0 30px 60px rgba(0,0,0,0.4); }
-        .feat-img { width: 100%; height: 240px; object-fit: cover; opacity: 0.7; transition: var(--transition); }
-        .feat-card:hover .feat-img { opacity: 1; }
-        .feat-content { padding: 2rem; }
-        .feat-tag { color: var(--yellow); font-family: 'Bebas Neue'; font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 0.5rem; display: block; }
-        .feat-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; }
-        .feat-list { list-style: none; color: var(--slate-400); font-size: 0.9rem; }
-        .feat-list li { margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .feat-list li::before { content: "→"; color: var(--yellow); font-weight: bold; }
+        .niche-card:hover { border-color: var(--yellow); transform: translateY(-5px); }
+        .niche-image { width: 100%; height: 200px; object-fit: cover; opacity: 0.8; transition: 0.5s; }
+        .niche-card:hover .niche-image { opacity: 1; }
+        .niche-content { padding: 1.5rem; text-align: left; }
+        .niche-tag { background: var(--yellow); color: #000; padding: 3px 10px; border-radius: 4px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; margin-bottom: 10px; display: inline-block; }
 
-        /* --- CTA --- */
-        .final-cta {
-            padding: 140px 5vw;
-            background: radial-gradient(circle at top, #001A5C 0%, var(--navy-dark) 100%);
+        /* ── CTA ── */
+        .cta-section {
+            padding: 120px 6vw;
+            background: #000;
             text-align: center;
         }
-        .cta-box {
-            max-width: 700px; margin: 0 auto;
-            background: rgba(255,255,255,0.02);
-            padding: 4rem 2rem; border-radius: 32px;
-            border: 1px solid var(--glass-border);
-            backdrop-filter: blur(20px);
-        }
-        .cta-form { display: flex; gap: 10px; margin-top: 2.5rem; }
-        .cta-input {
-            flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
-            padding: 1.2rem; border-radius: 12px; color: white; font-size: 1rem; outline: none;
-        }
-        .cta-input:focus { border-color: var(--yellow); }
-        .cta-submit {
-            background: var(--yellow); color: var(--blue-deep); border: none;
-            padding: 0 2.5rem; border-radius: 12px; font-weight: 800;
-            text-transform: uppercase; cursor: pointer; transition: var(--transition);
-        }
-        .cta-submit:hover { background: #fff; }
-
-        /* --- FOOTER --- */
-        footer { padding: 40px 5vw; border-top: 1px solid var(--glass-border); display: flex; justify-content: space-between; align-items: center; color: var(--slate-400); font-size: 0.85rem; }
+        .cta-form { max-width: 550px; margin: 3rem auto; display: flex; gap: 10px; }
+        .cta-input { flex: 1; padding: 1.2rem; border-radius: 8px; border: 1px solid #333; background: #111; color: white; font-size: 1rem; outline: none; }
+        .cta-btn { background: var(--yellow); border: none; padding: 0 2.5rem; font-weight: 700; cursor: pointer; border-radius: 8px; text-transform: uppercase; transition: 0.3s; }
+        .cta-btn:hover { background: var(--yellow-warm); }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; }
-            .countdown { flex-wrap: wrap; }
-            .cd-item { min-width: 45%; }
+            .countdown-grid { flex-wrap: wrap; gap: 0.8rem; }
+            .timer-box { min-width: 45%; }
             .cta-form { flex-direction: column; }
-            .cta-submit { padding: 1.2rem; }
+            .cta-btn { padding: 1.2rem; }
+            .hero-map-container { opacity: 0.2; }
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">LATAM<span>2</span>EU</div>
-        <div class="nav-links">
-            <a href="#stats">Impacto</a>
-            <a href="#growth">Mercados</a>
-            <a href="#reports">Relatórios</a>
-            <a href="#cta" class="btn-cta">Acesso Prioritário</a>
-        </div>
+        <div class="logo-text">LATAM<span>2</span>EU</div>
+        <a href="#cta" class="nav-cta">Baixar Inteligência</a>
     </nav>
 
     <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="map-container">
-            <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" style="width: 80%; opacity: 0.3;">
-                <path fill="#1e293b" d="M150,150 Q400,100 850,150 L850,350 Q400,400 150,350 Z" opacity="0.1"/>
-                <circle cx="280" cy="350" r="6" fill="#FFCC00">
-                    <animate attributeName="r" values="6;10;6" dur="3s" repeatCount="indefinite" />
+        <!-- 🌎 Animated Map Background -->
+        <div class="hero-map-container">
+            <svg viewBox="0 0 1200 600" class="map-svg">
+                <!-- América Latina -->
+                <g class="latam">
+                    <path d="M250,180 C220,250 240,320 280,380 C300,420 330,460 360,480 C390,460 410,420 420,380 C430,340 410,300 380,260 C350,220 320,200 290,180 Z" fill="rgba(26, 77, 181, 0.15)" stroke="rgba(255,255,255,0.05)"/>
+                </g>
+
+                <!-- Europa -->
+                <g class="europe">
+                    <path d="M800,180 C760,200 740,230 750,260 C760,290 800,310 850,300 C900,290 940,260 930,220 C920,190 880,170 840,170 Z" fill="rgba(26, 77, 181, 0.2)" stroke="rgba(255,255,255,0.05)"/>
+                </g>
+
+                <!-- Pontos (hubs) -->
+                <circle cx="300" cy="250" r="3" fill="var(--yellow)"/>
+                <circle cx="850" cy="240" r="3" fill="var(--yellow)"/>
+
+                <!-- Rota em infinito -->
+                <path id="route"
+                    d="M300,250 C450,100 750,100 850,240 C750,400 450,400 300,250 C150,100 450,100 600,250 C450,400 150,400 300,250"
+                    fill="none"
+                    stroke="rgba(255, 204, 0, 0.1)"
+                    stroke-width="1.5"
+                    stroke-dasharray="8,8"
+                />
+
+                <!-- ✈️ Avião (Representado por Círculo Branco) -->
+                <circle r="4" fill="#ffffff">
+                    <animateMotion dur="8s" repeatCount="indefinite" rotate="auto">
+                        <mpath href="#route"/>
+                    </animateMotion>
                 </circle>
-                <circle cx="460" cy="180" r="6" fill="#FFCC00">
-                    <animate attributeName="r" values="6;10;6" dur="3s" begin="1.5s" repeatCount="indefinite" />
+
+                <!-- 🚢 Navio (Representado por Círculo Amarelo) -->
+                <circle r="3" fill="var(--yellow)">
+                    <animateMotion dur="14s" repeatCount="indefinite" rotate="auto">
+                        <mpath href="#route"/>
+                    </animateMotion>
                 </circle>
-                <path d="M280,350 Q370,250 460,180" stroke="#FFCC00" stroke-width="2" fill="none" stroke-dasharray="10,5">
-                    <animate attributeName="stroke-dashoffset" from="100" to="0" dur="5s" repeatCount="indefinite" />
-                </path>
             </svg>
         </div>
 
         <div class="hero-content">
-            <div class="badge">Acordo Mercosul — União Europeia</div>
-            <h1>MAIO <span>01</span></h1>
-            <p class="hero-sub">
-                A maior zona de livre comércio do mundo entra em operação. 
-                Elimine barreiras tarifárias, simplifique a logística e domine o corredor transatlântico com inteligência de dados em tempo real.
+            <div class="treaty-label">Tratado de Livre Comércio Mercosul – União Europeia</div>
+            <div class="urgency-label">ENTRADA EM VIGOR</div>
+            <h1>1 DE <span>MAIO</span></h1>
+            <p class="hero-description">
+                As barreiras alfandegárias caem. Portugal assume a custódia estratégica do novo corredor comercial do Atlântico.
             </p>
 
-            <div class="countdown" id="timer">
-                <div class="cd-item">
-                    <span class="cd-val" id="days">--</span>
-                    <span class="cd-label">Dias</span>
+            <div class="countdown-grid" id="timer">
+                <div class="timer-box">
+                    <span class="timer-num" id="d">00</span>
+                    <span class="timer-label">Dias</span>
                 </div>
-                <div class="cd-item">
-                    <span class="cd-val" id="hours">--</span>
-                    <span class="cd-label">Horas</span>
+                <div class="timer-box">
+                    <span class="timer-num" id="h">00</span>
+                    <span class="timer-label">Horas</span>
                 </div>
-                <div class="cd-item">
-                    <span class="cd-val" id="minutes">--</span>
-                    <span class="cd-label">Minutos</span>
+                <div class="timer-box">
+                    <span class="timer-num" id="m">00</span>
+                    <span class="timer-label">Minutos</span>
                 </div>
-                <div class="cd-item" style="border-color: #fff;">
-                    <span class="cd-val" id="seconds" style="color: var(--yellow);">--</span>
-                    <span class="cd-label">Segundos</span>
+                <div class="timer-box" style="border-color: #FFF;">
+                    <span class="timer-num" id="s" style="color: var(--yellow);">00</span>
+                    <span class="timer-label">Segundos</span>
                 </div>
             </div>
 
-            <a href="#cta" class="btn-cta" style="padding: 1.5rem 4rem; font-size: 1.1rem; border-radius: 12px;">Desbloquear Dossier Estratégico</a>
+            <a href="#cta" class="nav-cta" style="padding: 1.5rem 4rem; font-size: 1.1rem; border-radius: 12px;">Garantir Inteligência Setorial →</a>
         </div>
     </section>
 
-    <div class="partners">
-        <span class="partner-logo">MERCOSUL</span>
-        <span class="partner-logo">EUROPEAN COMMISSION</span>
-        <span class="partner-logo">AICEP PORTUGAL</span>
-        <span class="partner-logo">APEX BRASIL</span>
-        <span class="partner-logo">LOGISTICS HUB SINES</span>
-    </div>
-
-    <section class="stats-grid" id="stats">
-        <div class="stat-card">
-            <div class="stat-num">0%</div>
-            <div class="stat-title">Alíquota de Importação</div>
-            <p class="stat-desc">Fim imediato das tarifas para 91% das exportações industriais do Mercosul para a UE.</p>
+    <!-- IMPACT SECTION -->
+    <section class="impact-section">
+        <div class="impact-card">
+            <div class="impact-val">91%</div>
+            <div class="impact-title">Tarifas Eliminadas</div>
+            <p class="impact-desc">Isenção total imediata ou gradual para a maioria das linhas pautais.</p>
         </div>
-        <div class="stat-card">
-            <div class="stat-num">€4B</div>
-            <div class="stat-title">Economia Anual</div>
-            <p class="stat-desc">Estimativa de redução de custos operacionais e tributários para empresas luso-brasileiras.</p>
+        <div class="impact-card">
+            <div class="impact-val">€4.5B</div>
+            <div class="impact-title">Poupança Fiscal</div>
+            <p class="impact-desc">Capital libertado anualmente para reinvestimento direto nas empresas.</p>
         </div>
-        <div class="stat-card">
-            <div class="stat-num">24h</div>
-            <div class="stat-title">Desalfandegamento</div>
-            <p class="stat-desc">Novos protocolos de certificação mútua aceleram a entrada de bens em portos estratégicos.</p>
+        <div class="impact-card">
+            <div class="impact-val">18m</div>
+            <div class="impact-title">Janela de Vantagem</div>
+            <p class="impact-desc">Tempo estimado de liderança de Portugal antes da saturação logística.</p>
         </div>
     </section>
 
-    <section class="data-section" id="growth">
-        <div class="section-header">
-            <h2>Expansão de Mercado 2026/27</h2>
-            <p style="color: var(--slate-400);">Análise preditiva do aumento de volume comercial por setor após a queda das barreiras técnicas.</p>
+    <!-- STACKED BARS SECTION -->
+    <section class="sectors-section" id="growth">
+        <div class="sectors-container">
+            <h2 style="text-align: center; font-family: 'Bebas Neue'; font-size: 4rem; margin-bottom: 10px;">Salto Comercial 2026</h2>
+            <p style="text-align: center; color: var(--slate); margin-bottom: 50px; font-size: 1.1rem;">Crescimento projetado: Volume Atual 2025 vs. Pós-Acordo 2026.</p>
+            
+            <div class="legend">
+                <div class="legend-item"><div class="dot" style="background: #1A3560;"></div> Volume Base 2025</div>
+                <div class="legend-item"><div class="dot" style="background: var(--yellow);"></div> Expansão Projetada 2026</div>
+            </div>
+
+            <div class="sector-item">
+                <div class="sector-info"><span>Agro-Alimentar & Vinhos Premium</span> <span>+95% de Impacto</span></div>
+                <div class="bar-wrapper">
+                    <div class="bar-segment bar-2025" data-width="35%">2025</div>
+                    <div class="bar-segment bar-2026" data-width="60%">Meta 2026</div>
+                </div>
+            </div>
+
+            <div class="sector-item">
+                <div class="sector-info"><span>Máquinas & Equipamentos Industriais</span> <span>+140% de Impacto</span></div>
+                <div class="bar-wrapper">
+                    <div class="bar-segment bar-2025" data-width="20%">2025</div>
+                    <div class="bar-segment bar-2026" data-width="75%">Meta 2026</div>
+                </div>
+            </div>
+
+            <div class="sector-item">
+                <div class="sector-info"><span>SaaS & Serviços Tecnológicos</span> <span>+120% de Impacto</span></div>
+                <div class="bar-wrapper">
+                    <div class="bar-segment bar-2025" data-width="25%">2025</div>
+                    <div class="bar-segment bar-2026" data-width="70%">Meta 2026</div>
+                </div>
+            </div>
         </div>
 
-        <div class="chart-container">
-            <div class="chart-row">
-                <div class="chart-label"><span>Agro-Processados & Alimentos</span> <span>+85%</span></div>
-                <div class="bar-bg">
-                    <div class="bar-fill bar-current" data-width="25%">Volume Atual</div>
-                    <div class="bar-fill bar-target" data-width="70%">Projeção 2026</div>
+        <div class="niches-grid">
+            <div class="niche-card">
+                <img src="https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?auto=format&fit=crop&w=600&q=80" alt="Agronegócio" class="niche-image">
+                <div class="niche-content">
+                    <span class="niche-tag">Relatório Setorial</span>
+                    <h4 style="font-size: 1.3rem; color: #FFF; margin-bottom: 8px;">Agronegócio</h4>
+                    <p style="color: var(--slate); font-size: 0.9rem;">Análise de quotas e eliminação imediata de taxas para produtos processados.</p>
                 </div>
             </div>
-            <div class="chart-row">
-                <div class="chart-label"><span>Tecnologia & Serviços Digitais</span> <span>+115%</span></div>
-                <div class="bar-bg">
-                    <div class="bar-fill bar-current" data-width="20%">Volume Atual</div>
-                    <div class="bar-fill bar-target" data-width="75%">Projeção 2026</div>
+            <div class="niche-card">
+                <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80" alt="Indústria" class="niche-image">
+                <div class="niche-content">
+                    <span class="niche-tag">Relatório Setorial</span>
+                    <h4 style="font-size: 1.3rem; color: #FFF; margin-bottom: 8px;">Indústria 4.0</h4>
+                    <p style="color: var(--slate); font-size: 0.9rem;">Desarmamento tarifário técnico para componentes e máquinas pesadas.</p>
                 </div>
             </div>
-            <div class="chart-row">
-                <div class="chart-label"><span>Energias Renováveis & ESG</span> <span>+140%</span></div>
-                <div class="bar-bg">
-                    <div class="bar-fill bar-current" data-width="15%">Volume Atual</div>
-                    <div class="bar-fill bar-target" data-width="80%">Projeção 2026</div>
+            <div class="niche-card">
+                <img src="https://images.unsplash.com/photo-1612817288484-6f916006741a?auto=format&fit=crop&w=600&q=80" alt="Cosmética" class="niche-image">
+                <div class="niche-content">
+                    <span class="niche-tag">Relatório Setorial</span>
+                    <h4 style="font-size: 1.3rem; color: #FFF; margin-bottom: 8px;">Cosmética Luxo</h4>
+                    <p style="color: var(--slate); font-size: 0.9rem;">Compliance sanitário facilitado e novas janelas de entrada marcas PT.</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="features" id="reports">
-        <div class="feat-card">
-            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=600&q=80" alt="Legal Compliance" class="feat-img">
-            <div class="feat-content">
-                <span class="feat-tag">Inteligência Regulatória</span>
-                <h3 class="feat-title">Compliance Jurídico</h3>
-                <ul class="feat-list">
-                    <li>Regras de Origem e Certificação</li>
-                    <li>Harmonização de Normas Técnicas</li>
-                    <li>Proteção de Dados Transatlântica</li>
-                </ul>
-            </div>
-        </div>
-        <div class="feat-card">
-            <!-- Imagem atualizada para Produtos de Cosmética conforme solicitado -->
-            <img src="https://images.unsplash.com/photo-1571781926291-c477ebfd024b?auto=format&fit=crop&w=600&q=80" alt="Cosméticos e Estratégia Fiscal" class="feat-img">
-            <div class="feat-content">
-                <span class="feat-tag">Estratégia Fiscal</span>
-                <h3 class="feat-title">Otimização de Impostos</h3>
-                <ul class="feat-list">
-                    <li>Triangulação Fiscal via Portugal</li>
-                    <li>Recuperação de Créditos de Exportação</li>
-                    <li>Planeamento de IVA Internacional</li>
-                </ul>
-            </div>
-        </div>
-        <div class="feat-card">
-            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=600&q=80" alt="Business Growth" class="feat-img">
-            <div class="feat-content">
-                <span class="feat-tag">Expansão de Vendas</span>
-                <h3 class="feat-title">Go-to-Market UE</h3>
-                <ul class="feat-list">
-                    <li>Mapeamento de Canais de Distribuição</li>
-                    <li>Análise de Concorrência Local</li>
-                    <li>Adaptação Cultural de Produto</li>
-                </ul>
+            <div class="niche-card">
+                <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80" alt="Logística" class="niche-image">
+                <div class="niche-content">
+                    <span class="niche-tag">Relatório Setorial</span>
+                    <h4 style="font-size: 1.3rem; color: #FFF; margin-bottom: 8px;">Logística</h4>
+                    <p style="color: var(--slate); font-size: 0.9rem;">Hubs de Sines e Santos: Otimização de custos transatlânticos.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="final-cta" id="cta">
-        <div class="cta-box">
-            <h2 style="font-family: 'Bebas Neue'; font-size: 4rem; line-height: 1;">NÃO FIQUE PARA TRÁS</h2>
-            <p style="color: var(--slate-300); margin-top: 1rem; font-size: 1.2rem;">
-                A janela de oportunidade fecha em 1 de Maio. Receba agora o guia completo de implementação para a sua empresa.
-            </p>
-            <form class="cta-form" onsubmit="event.preventDefault(); alert('Inscrição realizada com sucesso! Verifique o seu email.');">
-                <input type="email" class="cta-input" placeholder="Email corporativo..." required>
-                <button type="submit" class="cta-submit">Receber Dossier</button>
-            </form>
-            <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--slate-400);">Ao subscrever, concorda com a nossa política de proteção de dados comerciais.</p>
+    <!-- FINAL CTA -->
+    <section class="cta-section" id="cta">
+        <h2 style="color: white; font-size: 3.5rem; font-family: 'Bebas Neue';">DETENHA A INTELIGÊNCIA 2026</h2>
+        <p style="color: rgba(255,255,255,0.6); max-width: 600px; margin: 15px auto; font-size: 1.2rem;">
+            As quotas preferenciais serão distribuídas por ordem de chegada. Receba o dossier completo.
+        </p>
+        <div class="cta-form">
+            <input type="email" class="cta-input" placeholder="email-profissional@empresa.pt">
+            <button class="cta-btn">Entrar na Lista</button>
         </div>
+        <p style="font-size: 0.75rem; color: rgba(255,255,255,0.2); margin-top: 3rem;">© 2026 Latam2EU. Projeções baseadas no Tratado de Associação oficial.</p>
     </section>
-
-    <footer>
-        <div class="logo" style="font-size: 1.2rem;">LATAM<span>2</span>EU</div>
-        <div>© 2026 Inteligência de Mercado Estratégica. Todos os direitos reservados.</div>
-        <div style="display: flex; gap: 20px;">
-            <a href="#" style="color: inherit; text-decoration: none;">Privacidade</a>
-            <a href="#" style="color: inherit; text-decoration: none;">Termos</a>
-        </div>
-    </footer>
 
     <script>
-        // Countdown
-        function updateCountdown() {
-            const targetDate = new Date("May 1, 2026 00:00:00").getTime();
+        // Countdown Logic
+        function updateTimer() {
+            const target = new Date("May 1, 2026 00:00:00").getTime();
             const now = new Date().getTime();
-            const gap = targetDate - now;
+            const diff = target - now;
+            
+            if (diff <= 0) {
+                const timerEl = document.getElementById('timer');
+                if (timerEl) timerEl.innerHTML = "<h2 style='font-family:Bebas Neue; font-size:4rem; color:var(--yellow);'>O ACORDO ESTÁ ATIVO</h2>";
+                return;
+            }
 
-            const second = 1000;
-            const minute = second * 60;
-            const hour = minute * 60;
-            const day = hour * 24;
+            const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const s = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            const dEl = document.getElementById('d');
+            const hEl = document.getElementById('h');
+            const mEl = document.getElementById('m');
+            const sEl = document.getElementById('s');
 
-            const d = Math.floor(gap / day);
-            const h = Math.floor((gap % day) / hour);
-            const m = Math.floor((gap % hour) / minute);
-            const s = Math.floor((gap % minute) / second);
-
-            document.getElementById('days').innerText = d < 10 ? '0'+d : d;
-            document.getElementById('hours').innerText = h < 10 ? '0'+h : h;
-            document.getElementById('minutes').innerText = m < 10 ? '0'+m : m;
-            document.getElementById('seconds').innerText = s < 10 ? '0'+s : s;
+            if(dEl) dEl.innerText = d < 10 ? '0'+d : d;
+            if(hEl) hEl.innerText = h < 10 ? '0'+h : h;
+            if(mEl) mEl.innerText = m < 10 ? '0'+m : m;
+            if(sEl) sEl.innerText = s < 10 ? '0'+s : s;
         }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
-        // Reveal Progress Bars on Scroll
-        const observerOptions = { threshold: 0.5 };
+        // Bar Animation
         const barObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const bars = entry.target.querySelectorAll('.bar-fill');
-                    bars.forEach(bar => {
-                        bar.style.width = bar.getAttribute('data-width');
+                    const segments = entry.target.querySelectorAll('.bar-segment');
+                    segments.forEach(seg => {
+                        seg.style.width = seg.getAttribute('data-width');
                     });
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.2 });
 
-        barObserver.observe(document.querySelector('.chart-container'));
+        document.querySelectorAll('.sector-item').forEach(item => barObserver.observe(item));
     </script>
 </body>
 </html>
