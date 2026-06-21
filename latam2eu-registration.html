@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LATAM2EU — Registration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root,[data-theme="light"]{
+  --color-bg:#f4f3ef;--color-surface:#f9f8f5;--color-surface-2:#fdfcfa;
+  --color-surface-offset:#edeae4;--color-divider:#d8d4cc;--color-border:#ccc8c0;
+  --color-text:#1a1810;--color-text-muted:#6b6860;--color-text-faint:#aeaba4;
+  --color-text-inverse:#f9f8f4;
+  --color-primary:#1a4d8c;--color-primary-hover:#133a6e;--color-primary-hl:#d0dced;
+  --color-accent:#c97a0a;
+  --color-success:#2d7a3a;--color-success-hl:#d3e8d5;
+  --color-warning:#c97a0a;--color-warning-hl:#fdefd9;
+  --color-error:#c0392b;--color-error-hl:#f9ddd9;
+  --hero-bg-a:#0f1e38;--hero-bg-b:#0d1520;
+  --font-body:'Work Sans','Helvetica Neue',sans-serif;
+  --text-sm:clamp(0.875rem,0.8rem + 0.35vw,1rem);
+  --text-xl:clamp(1.5rem,1.2rem + 1.25vw,2.25rem);
+  --sp2:.5rem;--sp3:.75rem;--sp4:1rem;--sp5:1.25rem;--sp6:1.5rem;--sp8:2rem;--sp10:2.5rem;--sp12:3rem;
+  --r-sm:.375rem;--r-md:.5rem;--r-xl:1rem;--r-full:9999px;
+  --ease:180ms cubic-bezier(0.16,1,0.3,1);
+  --sh-md:0 4px 16px rgba(0,0,0,.10);--sh-lg:0 12px 40px rgba(0,0,0,.15);
+}
+[data-theme="dark"]{
+  --color-bg:#0d1520;--color-surface:#121c2e;--color-surface-2:#172238;
+  --color-surface-offset:#0f1929;--color-divider:#1e2d45;--color-border:#243350;
+  --color-text:#d4dde8;--color-text-muted:#6e85a0;--color-text-faint:#3d5269;
+  --color-text-inverse:#0d1520;
+  --color-primary:#5c9fd6;--color-primary-hover:#4a87bc;--color-primary-hl:#162038;
+  --color-accent:#f0a030;
+  --color-success:#4caf6a;--color-success-hl:#0e2a18;
+  --color-warning:#f0a030;--color-warning-hl:#2a1e08;
+  --color-error:#e05c4a;--color-error-hl:#2a1210;
+  --hero-bg-a:#080f1d;--hero-bg-b:#060c18;
+  --sh-md:0 4px 20px rgba(0,0,0,.45);--sh-lg:0 12px 48px rgba(0,0,0,.60);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;scroll-behavior:smooth;}
+body{font-family:var(--font-body);color:var(--color-text);background:var(--color-bg);min-height:100vh;transition:background var(--ease),color var(--ease);}
+input,button,select{font:inherit;color:inherit;} button{cursor:pointer;background:none;border:none;} a{color:inherit;text-decoration:none;}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:3px;border-radius:var(--r-sm);}
+.toolbar{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 var(--sp6);height:52px;background:oklch(from var(--color-bg) l c h / 0.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--color-divider);}
+.tb-brand,.tb-right{display:flex;align-items:center;gap:var(--sp3);} 
+.lang-toggle{display:flex;align-items:center;gap:0;border:1px solid var(--color-border);border-radius:var(--r-full);overflow:hidden;background:var(--color-surface);} 
+.lang-half{padding:6px 14px;font-size:11px;font-weight:700;color:var(--color-text-muted);transition:background var(--ease),color var(--ease);background:none;cursor:pointer;} .lang-half.active{background:var(--color-primary);color:#fff;} .lang-sep-line{width:1px;background:var(--color-border);height:20px;flex-shrink:0;}
+.icon-btn{width:36px;height:36px;border-radius:var(--r-md);border:1px solid var(--color-border);background:var(--color-surface);display:flex;align-items:center;justify-content:center;color:var(--color-text-muted);transition:all var(--ease);} .icon-btn:hover{background:var(--color-surface-offset);color:var(--color-text);} 
+.shell{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;padding-top:52px;}
+.hero{position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;padding:var(--sp12) var(--sp10);display:flex;flex-direction:column;justify-content:space-between;gap:var(--sp8);background:radial-gradient(circle at 15% 8%, rgba(92,159,214,.22) 0%, transparent 38%),radial-gradient(circle at 88% 82%, rgba(240,160,48,.17) 0%, transparent 32%),linear-gradient(180deg,var(--hero-bg-a),var(--hero-bg-b));border-right:1px solid rgba(255,255,255,.07);} 
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#d7e3f5;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;} 
+.hero-title{font-size:clamp(2rem,1.2rem + 2.5vw,3.6rem);line-height:1.02;font-weight:800;color:#fff;margin:var(--sp6) 0 var(--sp4);} 
+.hero-body{font-size:var(--text-sm);line-height:1.75;color:#afbdd3;max-width:54ch;} .hero-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp3);margin-top:var(--sp8);} .hero-stat{padding:var(--sp4);border-radius:var(--r-xl);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);} .hero-stat strong{display:block;color:#fff;font-size:1.4rem;margin-bottom:4px;} .hero-stat span{font-size:10px;color:#afbdd3;text-transform:uppercase;letter-spacing:.07em;} .hero-tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:var(--sp8);} .hero-tag{padding:8px 13px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.10);color:#d0dff5;font-size:11px;font-weight:600;} .hero-foot{font-size:11px;color:#6e8aaa;display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+.form-panel{padding:var(--sp10);background:var(--color-bg);display:flex;align-items:flex-start;justify-content:center;} .form-wrap{width:min(100%,700px);} .form-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:28px;box-shadow:var(--sh-lg);overflow:hidden;} .form-top{padding:var(--sp8);border-bottom:1px solid var(--color-divider);} .form-top h1{font-size:var(--text-xl);font-weight:800;line-height:1.1;margin-bottom:var(--sp2);} .form-top p{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.6;} .steps-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:var(--sp5);} .step{font-size:10px;font-weight:700;padding:6px 12px;border-radius:999px;border:1px solid var(--color-border);background:var(--color-surface-offset);color:var(--color-text-faint);} .step.done{background:var(--color-success-hl);color:var(--color-success);border-color:transparent;} .step.active{background:var(--color-primary-hl);color:var(--color-primary);}
+.form-body{padding:var(--sp8);display:grid;gap:var(--sp8);} .sec-title{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--color-text-faint);padding-bottom:var(--sp2);border-bottom:1px solid var(--color-divider);margin-bottom:var(--sp4);} .fg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp4);} .f{display:flex;flex-direction:column;gap:7px;} .f.full{grid-column:1/-1;} .lbl{font-size:11px;font-weight:700;color:var(--color-text-muted);} .lbl em{font-style:normal;color:var(--color-error);margin-left:2px;} .inp,.sel{width:100%;padding:13px 15px;border-radius:14px;border:1.5px solid var(--color-border);background:var(--color-surface-2);color:var(--color-text);transition:border-color var(--ease),box-shadow var(--ease);} .inp:focus,.sel:focus{outline:none;border-color:var(--color-primary);box-shadow:0 0 0 4px oklch(from var(--color-primary) l c h / 0.12);} .sel{cursor:pointer;} .hint{font-size:10px;color:var(--color-text-faint);margin-top:2px;}
+.pills{display:flex;flex-wrap:wrap;gap:9px;} .pill{padding:9px 14px;border-radius:999px;border:1.5px solid var(--color-border);background:var(--color-surface-2);font-size:11px;color:var(--color-text-muted);font-weight:700;cursor:pointer;transition:all var(--ease);} .pill.on{background:var(--color-primary-hl);color:var(--color-primary);border-color:oklch(from var(--color-primary) l c h / 0.3);} 
+.checks{display:grid;gap:12px;} .chk-row{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--color-text-muted);line-height:1.65;} .chk-row input{margin-top:3px;accent-color:var(--color-primary);width:16px;height:16px;flex-shrink:0;} 
+.action-row{display:flex;justify-content:space-between;align-items:center;gap:var(--sp4);flex-wrap:wrap;padding-top:var(--sp4);border-top:1px solid var(--color-divider);} .btn-primary{padding:13px 26px;border-radius:14px;background:var(--color-primary);color:#fff;font:inherit;font-weight:800;font-size:var(--text-sm);cursor:pointer;border:none;box-shadow:var(--sh-md);display:flex;align-items:center;gap:8px;transition:background var(--ease),transform var(--ease),box-shadow var(--ease);} .btn-primary:hover{background:var(--color-primary-hover);transform:translateY(-1px);box-shadow:var(--sh-lg);} .link-sm{font-size:12px;color:var(--color-text-muted);} .link-sm:hover{color:var(--color-primary);} 
+.toast{position:fixed;bottom:24px;right:24px;z-index:200;background:var(--color-surface);border:1px solid var(--color-border);border-radius:16px;padding:14px 18px;box-shadow:var(--sh-lg);display:flex;align-items:center;gap:12px;max-width:340px;opacity:0;transform:translateY(12px);pointer-events:none;transition:all 280ms ease;} .toast.show{opacity:1;transform:translateY(0);pointer-events:auto;} .t-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;} .t-icon.ok{background:var(--color-success-hl);color:var(--color-success);} .t-icon.info{background:var(--color-primary-hl);color:var(--color-primary);} .t-body strong{display:block;font-size:12px;font-weight:800;color:var(--color-text);} .t-body span{font-size:11px;color:var(--color-text-muted);} 
+.ok{color:var(--color-success);} .error{color:var(--color-error);} 
+@media(max-width:1100px){.shell{grid-template-columns:1fr;}.hero{position:static;height:auto;}} @media(max-width:680px){.hero,.form-panel{padding:var(--sp6);} .form-top,.form-body{padding:var(--sp5);} .fg{grid-template-columns:1fr;} .hero-stats{grid-template-columns:1fr 1fr;} .action-row{flex-direction:column-reverse;align-items:stretch;} .btn-primary{justify-content:center;} .tb-right{gap:var(--sp2);}}
+
+/* ── SUCCESS MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 300ms ease;}
+.modal-overlay.show{opacity:1;pointer-events:auto;}
+.modal-box{background:var(--color-surface);border:1px solid var(--color-border);border-radius:28px;box-shadow:var(--sh-lg);padding:var(--sp10) var(--sp8);max-width:420px;width:90%;text-align:center;transform:scale(.92) translateY(20px);transition:transform 320ms cubic-bezier(0.16,1,0.3,1);}
+.modal-overlay.show .modal-box{transform:scale(1) translateY(0);}
+.modal-icon{width:72px;height:72px;border-radius:50%;background:var(--color-success-hl);display:flex;align-items:center;justify-content:center;font-size:2rem;margin:0 auto var(--sp6);}
+.modal-title{font-size:var(--text-xl);font-weight:800;line-height:1.1;margin-bottom:var(--sp3);}
+.modal-body{font-size:var(--text-sm);color:var(--color-text-muted);line-height:1.7;margin-bottom:var(--sp8);}
+.modal-actions{display:flex;flex-direction:column;gap:var(--sp3);}
+.btn-secondary{padding:13px 26px;border-radius:14px;background:var(--color-surface-offset);color:var(--color-text-muted);font:inherit;font-weight:700;font-size:var(--text-sm);cursor:pointer;border:1px solid var(--color-border);transition:background var(--ease),color var(--ease);}
+.btn-secondary:hover{background:var(--color-surface-2);color:var(--color-text);}
+</style>
+</head>
+<body>
+<header class="toolbar">
+  <div class="tb-brand">
+    <img src="logo.png" alt="LATAM2EU" style="height:32px;object-fit:contain;display:block;">
+  </div>
+  <div class="tb-right">
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button class="lang-half" id="btn-en" onclick="setLang('en')">EN</button>
+      <div class="lang-sep-line"></div>
+      <button class="lang-half active" id="btn-pt" onclick="setLang('pt')">PT</button>
+    </div>
+    <button class="icon-btn" data-tt aria-label="Toggle theme">
+      <svg id="ico-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+      <svg id="ico-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+</header>
+<div class="shell">
+  <section class="hero">
+    <div>
+      <div class="hero-kicker" data-t="hero_kicker">Portugal Gateway · Exporter Onboarding</div>
+      <h2 class="hero-title" data-t="hero_title">Launch your first<br>Export Mission.</h2>
+      <p class="hero-body" data-t="hero_body">Register your company, define your export profile, and start organizing documents, freight quotes, partners, and compliance — all in one platform built for LATAM exporters entering the EU market through Portugal.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><strong>1</strong><span data-t="stat1">Unified profile</span></div>
+        <div class="hero-stat"><strong>6</strong><span data-t="stat2">Form sections</span></div>
+        <div class="hero-stat"><strong>24h</strong><span data-t="stat3">Review target</span></div>
+      </div>
+      <div class="hero-tags">
+        <div class="hero-tag" data-t="tag1">Company Setup</div>
+        <div class="hero-tag" data-t="tag2">Documents</div>
+        <div class="hero-tag" data-t="tag3">Products</div>
+        <div class="hero-tag" data-t="tag4">Partner Match</div>
+        <div class="hero-tag" data-t="tag5">Mission Ready</div>
+      </div>
+    </div>
+    <div class="hero-foot">
+      <span data-t="foot1">Built for LATAM exporters entering Portugal and Europe.</span>
+      <span data-t="foot2">Secure · Staged verification · Mission-first</span>
+    </div>
+  </section>
+  <section class="form-panel">
+    <div class="form-wrap">
+      <div class="form-card">
+        <div class="form-top">
+          <h1 data-t="form_h1">Create exporter account</h1>
+          <p data-t="form_sub">Set up your profile to access the LATAM2EU dashboard, manage mission documents, and connect with logistics and distribution partners.</p>
+          <div class="steps-row">
+            <span class="step done" data-t="s1">✓ Account</span>
+            <span class="step active" data-t="s2">Company</span>
+            <span class="step" data-t="s3">Compliance</span>
+            <span class="step" data-t="s4">Review</span>
+          </div>
+        </div>
+        <form class="form-body" id="rform">
+          <section>
+            <div class="sec-title" data-t="sec1">Account owner</div>
+            <div class="fg">
+              <label class="f"><span class="lbl"><span data-t="l_username">Username</span><em>*</em></span><input class="inp" id="f-username" type="text" autocomplete="username" placeholder="carlos.ferreira" required></label>
+              <label class="f"><span class="lbl"><span data-t="l_name">Full name</span><em>*</em></span><input class="inp" id="f-name" type="text" autocomplete="name" placeholder="Carlos Ferreira" required></label>
+              <label class="f"><span class="lbl"><span data-t="l_email">Work email</span><em>*</em></span><input class="inp" id="f-email" type="email" autocomplete="email" placeholder="carlos@company.com" required></label>
+              <label class="f"><span class="lbl"><span data-t="l_pass">Password</span><em>*</em></span><input class="inp" id="f-pass" type="password" placeholder="Minimum 8 characters" required minlength="8"><span class="hint" data-t="h_pass">Minimum 8 characters.</span></label>
+              <label class="f"><span class="lbl"><span data-t="l_phone">Phone / WhatsApp</span><em>*</em></span><input class="inp" id="f-phone" type="tel" autocomplete="tel" placeholder="+55 11 99999-9999" required></label>
+            </div>
+          </section>
+          <section>
+            <div class="sec-title" data-t="sec2">Company details</div>
+            <div class="fg">
+              <label class="f"><span class="lbl"><span data-t="l_company">Company name</span><em>*</em></span><input class="inp" id="f-company" type="text" autocomplete="organization" placeholder="Ferreira Exportações Ltda" required></label>
+              <label class="f"><span class="lbl"><span data-t="l_country">Country</span><em>*</em></span>
+                <select class="sel" id="f-country" required>
+                  <option value="" data-t="opt_sel">Select country</option>
+                  <option>Argentina — ES</option><option>Bolívia — ES / QU / AY</option><option>Brasil — PT</option><option>Chile — ES</option><option>Colômbia — ES</option><option>Equador — ES</option><option>Paraguai — ES / GN</option><option>Peru — ES / QU / AY</option><option>Uruguai — ES</option><option>Venezuela — ES</option>
+                </select>
+              </label>
+            </div>
+          </section>
+          <section>
+            <div class="sec-title" data-t="sec5">I am registering as</div>
+            <div class="fg">
+              <div class="f full">
+                <div class="pills" id="pg-role">
+                  <button type="button" class="pill on" data-v="produtor">🇧🇷 Produtor</button>
+                  <button type="button" class="pill" data-v="Distributor">🏭 Distributor</button>
+                  <button type="button" class="pill" data-v="Reseller">🛒  Revendedor</button>
+                </div>
+              </div>
+              <label class="f full"><span class="lbl" data-t="l_web">LinkedIn / Website Pessoal</span><input class="inp" id="f-web" type="url" placeholder="https://..."></label>
+            </div>
+          </section>
+          <section>
+            <div class="sec-title" data-t="sec6">Terms &amp; consent</div>
+            <div class="checks">
+              <label class="chk-row"><input type="checkbox" required><span data-t="chk1">I confirm the information provided is accurate and can be used for onboarding and compliance review.</span></label>
+              <label class="chk-row"><input type="checkbox" required><span data-t="chk2">I agree to the platform terms, privacy rules, and partner matching workflow.</span></label>
+              <label class="chk-row"><input type="checkbox"><span data-t="chk3">I want to receive product opportunities, freight updates, and partner interest alerts by email.</span></label>
+            </div>
+          </section>
+          <div class="action-row">
+            <a href="latam2eu-login.html" class="link-sm" data-t="lnk_signin">Already have an account? Sign in</a>
+            <button type="submit" class="btn-primary"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg><span data-t="btn_submit">Create exporter account</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <div id="actions" style="display:none">
+	  <section class="form-panel" style="padding-top:0;">
+		<div class="form-wrap">
+		  <div class="form-card" style="margin-top: -1rem; border-style:dashed; opacity:0.9;">
+			<div class="form-top" style="border-bottom:none; padding-bottom:0.5rem;">
+			  <h1 style="font-size:12px; text-transform:uppercase; letter-spacing:0.12em;">API debug</h1>
+			  <p style="font-size:11px; color:var(--color-text-faint);">Last response and status from the Worker.</p>
+			</div>
+			<div class="form-body" style="padding-top:0.5rem; gap:0.75rem;">
+			  <pre id="last-response" style="min-height:120px; max-height:260px; overflow:auto; font-size:11px; background:var(--color-surface-offset); padding:0.75rem 1rem; border-radius:12px; border:1px solid var(--color-border);">(no response yet)</pre>
+			  <div id="status" style="font-size:11px; color:var(--color-text-muted);"></div>
+			</div>
+		  </div>
+		</div>
+	  </section>  
+   </div>
+</div>
+<div class="toast" id="toast"><div class="t-icon ok" id="t-icon">✓</div><div class="t-body"><strong id="t-title">Done</strong><span id="t-msg"></span></div></div>
+<script>
+function showStatus(msg, ok = true) {
+  const el = document.getElementById('status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = ok ? 'ok' : 'error';
+}
+
+function updateCookieViewer() {
+  const viewer = document.getElementById('cookie-viewer');
+  if (!viewer) return;
+  try {
+    viewer.textContent = document.cookie || '(no cookies visible to JS)';
+  } catch (e) {
+    viewer.textContent = '(unable to read document.cookie in this environment)';
+  }
+}
+
+const BASE_API_URL = 'https://latam2eu.amahaskell.workers.dev';
+
+async function callApi(path, options = {}) {
+  const baseUrlInput = document.getElementById('base-url');
+  const baseUrl = baseUrlInput ? baseUrlInput.value.trim().replace(/\/$/, '') : BASE_API_URL;
+  const url = baseUrl + path;
+
+  const fetchOptions = {
+    method: options.method || 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    },
+    credentials: 'include'
+  };
+
+  if (options.body) fetchOptions.body = JSON.stringify(options.body);
+
+  try {
+    const response = await fetch(url, fetchOptions);
+    const text = await response.text();
+    let data;
+    try { data = JSON.parse(text); } catch (e) { data = { raw: text }; }
+
+    const lastRespEl = document.getElementById('last-response');
+    if (lastRespEl) {
+      lastRespEl.textContent = JSON.stringify({
+        status: response.status,
+        ok: response.ok,
+        headers: Object.fromEntries(response.headers.entries()),
+        body: data
+      }, null, 2);
+    }
+
+    updateCookieViewer();
+    return { response, data };
+  } catch (err) {
+    showStatus('Network error: ' + err.message, false);
+    const lastRespEl = document.getElementById('last-response');
+    if (lastRespEl) lastRespEl.textContent = 'Network error: ' + err.message;
+    return null;
+  }
+}
+
+const T = {
+  en:{hero_kicker:"Portugal Gateway · Exporter Onboarding",hero_title:"Launch your first<br>Export Mission.",hero_body:"Register your company, define your export profile, and start organizing documents, freight quotes, partners, and compliance — all in one platform built for Exporter from South Americas entering the EU market through Portugal.",stat1:"Unified profile",stat2:"Form sections",stat3:"Review target",tag1:"Company Setup",tag2:"Documents",tag3:"Products",tag4:"Partner Match",tag5:"Mission Ready",foot1:"Built for Exporter from South Americas entering Portugal and Europe.",foot2:"Secure · Staged verification · Mission-first",form_h1:"Create exporter account",form_sub:"Set up your profile to access the LATAM2EU dashboard, manage mission documents, and connect with logistics and distribution partners.",s1:"✓ Account",s2:"Company",s3:"Compliance",s4:"Review",sec1:"Account owner",sec2:"Company details",sec5:"I am registering as",sec6:"Terms & consent",l_username:"Username",l_name:"Full name",l_email:"Work email",l_pass:"Password",l_phone:"Phone / WhatsApp",h_pass:"Minimum 8 characters.",l_company:"Company name",l_country:"Country",l_web:"LinkedIn / Website Personal",chk1:"I confirm the information provided is accurate and can be used for onboarding and compliance review.",chk2:"I agree to the platform terms, privacy rules, and partner matching workflow.",chk3:"I want to receive product opportunities, freight updates, and partner interest alerts by email.",lnk_signin:"Already have an account? Sign in",btn_submit:"Create exporter account",opt_sel:"Select country",toast_submit_t:"Registration submitted!",toast_submit_m:"Your exporter profile is pending review.",modal_title:"Account created successfully!",modal_body:"Your exporter profile has been submitted and is pending review.<br>Sign in to access your dashboard.",modal_login:"Go to Login",modal_close:"Stay on this page"},
+  pt:{hero_kicker:"Portal Portugal · Registo de Exportador",hero_title:"Lance a sua primeira<br>Missão de Exportação.",hero_body:"Registe a sua empresa, defina o seu perfil de exportação e comece a organizar documentos, cotações de frete, parceiros e conformidade — tudo numa plataforma criada para exportadores LATAM que entram no mercado europeu por Portugal.",stat1:"Perfil unificado",stat2:"Secções",stat3:"Prazo de revisão",tag1:"Configuração",tag2:"Documentos",tag3:"Produtos",tag4:"Parceiros",tag5:"Missão pronta",foot1:"Criado para exportadores LATAM a entrar em Portugal e na Europa.",foot2:"Seguro · Verificação faseada · Missão em primeiro lugar",form_h1:"Criar conta de exportador",form_sub:"Configure o seu perfil para aceder ao dashboard LATAM2EU, gerir documentos de missão e conectar com parceiros de logística e distribuição.",s1:"✓ Conta",s2:"Empresa",s3:"Conformidade",s4:"Revisão",sec1:"Titular da conta",sec2:"Dados da empresa",sec5:"Estou a registar-me como",sec6:"Termos e consentimento",l_username:"Nome de utilizador",l_name:"Nome completo",l_email:"Email profissional",l_pass:"Palavra-passe",l_phone:"Telefone / WhatsApp",h_pass:"Mínimo 8 caracteres.",l_company:"Nome da empresa",l_country:"País",l_web:"LinkedIn / Website Pessoal",chk1:"Confirmo que as informações fornecidas são precisas e podem ser usadas para integração e revisão de conformidade.",chk2:"Concordo com os termos da plataforma, regras de privacidade e fluxo de correspondência de parceiros.",chk3:"Desejo receber oportunidades de produto, atualizações de frete e alertas de interesse de parceiros por email.",lnk_signin:"Já tem conta? Iniciar sessão",btn_submit:"Criar conta de exportador",opt_sel:"Selecionar país",toast_submit_t:"Registo submetido!",toast_submit_m:"O seu perfil de exportador está pendente de revisão.",modal_title:"Conta criada com sucesso!",modal_body:"O seu perfil de exportador foi submetido e está pendente de revisão.<br>Faça login para aceder ao dashboard.",modal_login:"Ir para o Login",modal_close:"Ficar nesta página"}
+};
+
+let lang = 'pt';
+function setLang(l){
+  lang = l;
+  document.getElementById('btn-en').classList.toggle('active', l==='en');
+  document.getElementById('btn-pt').classList.toggle('active', l==='pt');
+  document.querySelectorAll('[data-t]').forEach(el=>{
+    const k = el.getAttribute('data-t');
+    if(T[l][k] !== undefined) el.innerHTML = T[l][k];
+  });
+  document.querySelectorAll('[data-t="opt_sel"]').forEach(op => op.textContent = T[l].opt_sel);
+}
+
+(function(){
+  const h = document.documentElement;
+  const btn = document.querySelector('[data-tt]');
+  let t = h.getAttribute('data-theme') || 'dark';
+  function apply(th){
+    t = th; h.setAttribute('data-theme', th);
+    document.getElementById('ico-sun').style.display = th==='dark'?'block':'none';
+    document.getElementById('ico-moon').style.display = th==='light'?'block':'none';
+  }
+  apply(t);
+  if (btn) btn.addEventListener('click', ()=> apply(t==='dark'?'light':'dark'));
+})();
+
+document.querySelectorAll('.pills').forEach(g=>{
+  g.addEventListener('click', e=>{
+    const p = e.target.closest('.pill');
+    if (!p) return;
+    if (g.id === 'pg-role') {
+      g.querySelectorAll('.pill').forEach(x => x.classList.remove('on'));
+      p.classList.add('on');
+    } else {
+      p.classList.toggle('on');
+    }
+  });
+});
+
+let tt;
+function toast(type, icon, title, msg){
+  const el=document.getElementById('toast');
+  if(!el) return;
+  document.getElementById('t-icon').textContent=icon;
+  document.getElementById('t-icon').className='t-icon '+type;
+  document.getElementById('t-title').textContent=title;
+  document.getElementById('t-msg').textContent=msg||'';
+  el.classList.add('show');
+  clearTimeout(tt);
+  tt=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+const regForm = document.getElementById('rform');
+if (regForm) {
+  regForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const username = document.getElementById('f-username').value.trim();
+    const fullName = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const password = document.getElementById('f-pass').value;
+    const phone = document.getElementById('f-phone').value.trim();
+    const company = document.getElementById('f-company').value.trim();
+    const country = document.getElementById('f-country').value.trim();
+    const rolePill = document.querySelector('#pg-role .pill.on');
+    const role = rolePill ? rolePill.dataset.v : 'produtor';
+
+    const body = {
+      username: username,
+      password: password,
+      full_name: fullName,
+      email: email,
+      role: role,
+      phone: phone,
+      company_name: company,
+      country: country
+    };
+
+    const result = await callApi('/register', { method: 'POST', body });
+    if (result && result.data && result.data.ok) {
+      showSuccessModal();
+      showStatus('Register OK: userId=' + (result.data.userId || ''), true);
+    } else if (result && result.data) {
+      toast('info','⚠️','Erro', result.data.message || 'Unknown error');
+      showStatus('Register failed: ' + (result.data.message || 'Unknown error'), false);
+    }
+  });
+}
+
+
+function showSuccessModal() {
+  const modal = document.getElementById('success-modal');
+  document.getElementById('modal-title').innerHTML  = T[lang].modal_title;
+  document.getElementById('modal-body').innerHTML   = T[lang].modal_body;
+  document.getElementById('modal-login-label').textContent = T[lang].modal_login;
+  document.getElementById('modal-close-label').textContent = T[lang].modal_close;
+  modal.classList.add('show');
+}
+function closeSuccessModal() {
+  document.getElementById('success-modal').classList.remove('show');
+}
+// close on overlay click
+document.getElementById('success-modal').addEventListener('click', function(e){
+  if (e.target === this) closeSuccessModal();
+});
+
+setLang('pt');
+updateCookieViewer();
+</script>
+
+<!-- ── SUCCESS MODAL ── -->
+<div class="modal-overlay" id="success-modal" aria-modal="true" role="dialog">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <h2 class="modal-title" id="modal-title">Conta criada com sucesso!</h2>
+    <p class="modal-body" id="modal-body">O seu perfil de exportador foi submetido e está pendente de revisão.<br>Faça login para aceder ao dashboard.</p>
+    <div class="modal-actions">
+      <a href="latam2eu-login.html" class="btn-primary" style="justify-content:center;text-decoration:none;" id="modal-login-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        <span id="modal-login-label">Ir para o Login</span>
+      </a>
+      <button class="btn-secondary" id="modal-close-btn" onclick="closeSuccessModal()">
+        <span id="modal-close-label">Ficar nesta página</span>
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
