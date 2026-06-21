@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>LATAM2EU · Profile Review</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #0d1520;
+      --panel: #121c2e;
+      --panel-alt: #172238;
+      --border: #243450;
+      --text: #d0cdc1;
+      --muted: #7a8fa8;
+      --accent: #5c9fd6;
+      --accent-soft: #1a4d8c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 10px 16px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    header h1 { font-size: 15px; }
+    header span { font-size: 11px; color: var(--muted); }
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+      min-height: 0;
+    }
+    .sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .field { margin-bottom: 8px; font-size: 11px; cursor: pointer; }
+    .field label { display: block; margin-bottom: 2px; color: var(--muted); }
+    .field span.value {
+      display: block;
+      padding: 5px 7px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--panel-alt);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .controls { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      background: var(--accent);
+      color: #0d1520;
+      font-weight: 600;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    canvas { width: 100%; height: 100%; display: block; background: #020817; }
+    .canvas-wrap { position: relative; background: #020817; }
+    .status { font-size: 11px; color: var(--muted); }
+    .badge {
+      border-radius: 999px;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      font-size: 10px;
+      color: var(--muted);
+    }
+    @media (max-width: 800px) {
+      main { grid-template-columns: minmax(0, 1fr); }
+      .sidebar { border-right: none; border-bottom: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>LATAM2EU · Profile Review</h1>
+      <span id="statusText">Loading profile from /me…</span>
+    </div>
+    <div class="badge" id="badgeLabel">Overview</div>
+  </header>
+
+  <main>
+    <aside class="sidebar">
+      <div>
+        <div class="section-title">Client</div>
+        <div class="field" data-section="client">
+          <label>Full name</label>
+          <span class="value" id="v-name">—</span>
+        </div>
+        <div class="row">
+          <div class="field" data-section="client">
+            <label>Email</label>
+            <span class="value" id="v-email">—</span>
+          </div>
+          <div class="field" data-section="client">
+            <label>Phone / WhatsApp</label>
+            <span class="value" id="v-phone">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Company</div>
+        <div class="field" data-section="company">
+          <label>Company name</label>
+          <span class="value" id="v-company">—</span>
+        </div>
+        <div class="row">
+          <div class="field" data-section="company">
+            <label>Country</label>
+            <span class="value" id="v-country">—</span>
+          </div>
+          <div class="field" data-section="company">
+            <label>Base port</label>
+            <span class="value" id="v-port">—</span>
+          </div>
+        </div>
+        <div class="field" data-section="company">
+          <label>Company address</label>
+          <span class="value" id="v-address">—</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Export profile</div>
+        <div class="field" data-section="profile">
+          <label>Summary</label>
+          <span class="value" id="v-summary">—</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Canvas controls</div>
+        <div class="controls">
+          <button id="btnOverview" type="button">Overview</button>
+          <button id="btnClient" class="secondary" type="button">Highlight client</button>
+          <button id="btnCompany" class="secondary" type="button">Highlight company</button>
+          <button id="btnProfile" class="secondary" type="button">Highlight profile</button>
+        </div>
+      </div>
+    </aside>
+
+    <section class="canvas-wrap">
+      <canvas id="profileCanvas"></canvas>
+    </section>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('profileCanvas');
+    const ctx = canvas.getContext('2d');
+    const badgeLabel = document.getElementById('badgeLabel');
+    const statusText = document.getElementById('statusText');
+
+    let highlightSection = 'overview'; // 'overview' | 'client' | 'company' | 'profile'
+
+    function getProfileData() {
+      return {
+        name: document.getElementById('v-name').textContent.trim(),
+        email: document.getElementById('v-email').textContent.trim(),
+        phone: document.getElementById('v-phone').textContent.trim(),
+        company: document.getElementById('v-company').textContent.trim(),
+        country: document.getElementById('v-country').textContent.trim(),
+        port: document.getElementById('v-port').textContent.trim(),
+        address: document.getElementById('v-address').textContent.trim(),
+        summary: document.getElementById('v-summary').textContent.trim(),
+      };
+    }
+async function loadProfileFromMe() {
+  try {
+    const res = await fetch('https://latam2eu.amahaskell.workers.dev/me', {
+      method: 'GET',
+      credentials: 'include',
+      headers: { 'Accept': 'application/json' },
+    });
+
+    if (!res.ok) {
+      statusText.textContent = 'Error loading /me';
+      return;
+    }
+
+    const data = await res.json();
+
+    // Map JSON from Worker → UI
+    document.getElementById('v-name').textContent = data.name || '—';
+    document.getElementById('v-email').textContent = data.email || '—';
+    document.getElementById('v-phone').textContent = data.phone || '—';
+    document.getElementById('v-company').textContent = data.company_name || '—';
+    document.getElementById('v-country').textContent = data.company_country || '—';
+    document.getElementById('v-port').textContent = data.base_port || '—';
+    document.getElementById('v-address').textContent = data.company_address || '—';
+    document.getElementById('v-summary').textContent = data.export_profile || '—';
+
+    statusText.textContent =
+      'Profile loaded from /me · click sections to highlight';
+    drawProfile();
+  } catch (err) {
+    console.error('Error loading /me', err);
+    statusText.textContent = 'Error loading /me';
+  }
+}
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width * window.devicePixelRatio;
+      canvas.height = rect.height * window.devicePixelRatio;
+      ctx.setTransform(window.devicePixelRatio, 0, 0, window.devicePixelRatio, 0, 0);
+      drawProfile();
+    }
+
+    function drawRoundedRect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    function wrapText(text, x, y, maxWidth, lineHeight) {
+      const words = text.split(/\s+/);
+      let line = '';
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, y);
+    }
+
+    function drawProfile() {
+      if (!canvas.width || !canvas.height) return;
+
+      const { name, email, phone, company, country, port, address, summary } = getProfileData();
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#020817';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const margin = 32;
+      const cardWidth = canvas.width / window.devicePixelRatio - margin * 2;
+      const cardHeight = canvas.height / window.devicePixelRatio - margin * 2;
+      const x = margin;
+      const y = margin;
+
+      drawRoundedRect(x, y, cardWidth, cardHeight, 20);
+      const grd = ctx.createLinearGradient(x, y, x + cardWidth, y + cardHeight);
+      grd.addColorStop(0, '#121c2e');
+      grd.addColorStop(1, '#172238');
+      ctx.fillStyle = grd;
+      ctx.fill();
+
+      function paintHighlight(section, rect) {
+        if (highlightSection !== section) return;
+        const [hx, hy, hw, hh] = rect;
+        const lg = ctx.createLinearGradient(hx, hy, hx + hw, hy + hh);
+        lg.addColorStop(0, 'rgba(92,159,214,0.18)');
+        lg.addColorStop(1, 'rgba(240,160,48,0.18)');
+        ctx.fillStyle = lg;
+        drawRoundedRect(hx, hy, hw, hh, 12);
+        ctx.fill();
+      }
+
+      const avatarX = x + 60;
+      const avatarY = y + 60;
+      const avatarR = 32;
+
+      const clientRect = [x + 24, y + 24, cardWidth - 48, 110];
+      paintHighlight('client', clientRect);
+
+      const companyRect = [x + 24, y + 150, cardWidth - 48, 110];
+      paintHighlight('company', companyRect);
+
+      const profileRect = [x + 24, y + 280, cardWidth - 48, cardHeight - 304];
+      paintHighlight('profile', profileRect);
+
+      // Avatar circle
+      ctx.beginPath();
+      ctx.arc(avatarX, avatarY, avatarR, 0, Math.PI * 2);
+      const aGrd = ctx.createLinearGradient(
+        avatarX - avatarR,
+        avatarY - avatarR,
+        avatarX + avatarR,
+        avatarY + avatarR
+      );
+      aGrd.addColorStop(0, '#1a4d8c');
+      aGrd.addColorStop(1, '#f0a030');
+      ctx.fillStyle = aGrd;
+      ctx.fill();
+
+      const initials = name
+        .split(' ')
+        .filter(Boolean)
+        .slice(0, 2)
+        .map((p) => p[0].toUpperCase())
+        .join('');
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 18px system-ui';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(initials || 'CF', avatarX, avatarY);
+
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = '#f9f8f4';
+      ctx.font = 'bold 18px system-ui';
+      ctx.fillText(name || '—', x + 120, y + 50);
+
+      ctx.fillStyle = '#7a8fa8';
+      ctx.font = '12px system-ui';
+      ctx.fillText(company || '—', x + 120, y + 70);
+
+      const contactY = y + 100;
+      ctx.fillStyle = '#d0cdc1';
+      ctx.font = '12px system-ui';
+      ctx.fillText(email || '—', x + 40, contactY);
+      ctx.fillText(phone || '—', x + 40, contactY + 18);
+
+      ctx.fillStyle = '#7a8fa8';
+      ctx.fillText(`${country || '—'} · Base port: ${port || '—'}`, x + 40, contactY + 38);
+
+      const dividerY = contactY + 56;
+      ctx.strokeStyle = '#243450';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x + 32, dividerY);
+      ctx.lineTo(x + cardWidth - 32, dividerY);
+      ctx.stroke();
+
+      const textX = x + 40;
+      let textY = dividerY + 24;
+      ctx.fillStyle = '#7a8fa8';
+      ctx.font = '11px system-ui';
+      ctx.fillText('Company address', textX, textY);
+      ctx.fillStyle = '#d0cdc1';
+      textY += 16;
+      wrapText(address || '—', textX, textY, cardWidth - 80, 15);
+
+      textY += 40;
+      ctx.fillStyle = '#7a8fa8';
+      ctx.font = '11px system-ui';
+      ctx.fillText('Export profile', textX, textY);
+      ctx.fillStyle = '#d0cdc1';
+      textY += 16;
+      wrapText(summary || '—', textX, textY, cardWidth - 80, 15);
+    }
+
+    function setHighlight(section) {
+      highlightSection = section;
+      badgeLabel.textContent =
+        section === 'client'
+          ? 'Client details'
+          : section === 'company'
+          ? 'Company info'
+          : section === 'profile'
+          ? 'Export profile'
+          : 'Overview';
+      drawProfile();
+    }
+
+    document.querySelectorAll('.field').forEach((field) => {
+      field.addEventListener('click', () => {
+        const sec = field.getAttribute('data-section') || 'overview';
+        setHighlight(sec);
+        statusText.textContent = `Highlighting ${sec} on canvas`;
+      });
+    });
+
+    document.getElementById('btnOverview').addEventListener('click', () => {
+      setHighlight('overview');
+      statusText.textContent = 'Overview view';
+    });
+    document.getElementById('btnClient').addEventListener('click', () => {
+      setHighlight('client');
+      statusText.textContent = 'Highlighting client details';
+    });
+    document.getElementById('btnCompany').addEventListener('click', () => {
+      setHighlight('company');
+      statusText.textContent = 'Highlighting company info';
+    });
+    document.getElementById('btnProfile').addEventListener('click', () => {
+      setHighlight('profile');
+      statusText.textContent = 'Highlighting export profile';
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+    window.addEventListener('load', () => {
+      resizeCanvas();
+      loadProfileFromMe();
+    });
+  </script>
+</body>
+</html>
