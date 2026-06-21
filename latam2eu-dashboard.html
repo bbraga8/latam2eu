@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LATAM2EU Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300..700&display=swap" rel="stylesheet">
+<style>
+:root, [data-theme="light"] {
+  --color-bg:              #f4f3ef;
+  --color-surface:         #f9f8f5;
+  --color-surface-2:       #fdfcfa;
+  --color-surface-offset:  #edeae4;
+  --color-surface-dynamic: #e3e0d9;
+  --color-divider:         #d8d4cc;
+  --color-border:          #ccc8c0;
+  --color-text:            #1a1810;
+  --color-text-muted:      #6b6860;
+  --color-text-faint:      #aeaba4;
+  --color-text-inverse:    #f9f8f4;
+  --color-primary:         #1a4d8c;
+  --color-primary-hover:   #133a6e;
+  --color-primary-hl:      #d0dced;
+  --color-accent:          #c97a0a;
+  --color-accent-hover:    #a86208;
+  --color-success:         #2d7a3a;
+  --color-success-hl:      #d3e8d5;
+  --color-warning:         #c97a0a;
+  --color-warning-hl:      #fdefd9;
+  --color-error:           #c0392b;
+  --color-error-hl:        #f9ddd9;
+  --color-sidebar-bg:      #0f1e38;
+  --color-sidebar-text:    #8fa3bf;
+  --color-sidebar-active:  #5c9fd6;
+  --color-sidebar-border:  rgba(255,255,255,0.07);
+  --font-body: 'Work Sans', 'Helvetica Neue', sans-serif;
+  --text-xs:   clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm:   clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg:   clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl:   clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+  --space-1:.25rem;--space-2:.5rem;--space-3:.75rem;--space-4:1rem;
+  --space-5:1.25rem;--space-6:1.5rem;--space-8:2rem;--space-10:2.5rem;
+  --space-12:3rem;--space-16:4rem;
+  --radius-sm:.375rem;--radius-md:.5rem;--radius-lg:.75rem;--radius-xl:1rem;--radius-full:9999px;
+  --transition:180ms cubic-bezier(0.16,1,0.3,1);
+  --shadow-sm:0 1px 3px oklch(0.2 0.02 240 / 0.06);
+  --shadow-md:0 4px 16px oklch(0.2 0.02 240 / 0.1);
+  --shadow-lg:0 12px 40px oklch(0.2 0.02 240 / 0.16);
+  --sidebar-w: 240px;
+}
+[data-theme="dark"] {
+  --color-bg:              #0d1520;
+  --color-surface:         #121c2e;
+  --color-surface-2:       #172238;
+  --color-surface-offset:  #0f1929;
+  --color-surface-dynamic: #1e2d44;
+  --color-divider:         #1e2d44;
+  --color-border:          #243450;
+  --color-text:            #d0cdc1;
+  --color-text-muted:      #7a8fa8;
+  --color-text-faint:      #3d5272;
+  --color-text-inverse:    #0d1520;
+  --color-primary:         #5c9fd6;
+  --color-primary-hover:   #7cb8e8;
+  --color-primary-hl:      #172238;
+  --color-accent:          #f0a030;
+  --color-accent-hover:    #f7bb58;
+  --color-success:         #4caf68;
+  --color-success-hl:      #0e2516;
+  --color-warning:         #f0a030;
+  --color-warning-hl:      #1e1200;
+  --color-error:           #e05a4a;
+  --color-error-hl:        #1e0d0a;
+  --color-sidebar-bg:      #080e1a;
+  --color-sidebar-text:    #6880a0;
+  --color-sidebar-active:  #5c9fd6;
+  --color-sidebar-border:  rgba(255,255,255,0.05);
+  --shadow-sm:0 1px 3px oklch(0 0 0 / 0.3);
+  --shadow-md:0 4px 16px oklch(0 0 0 / 0.4);
+  --shadow-lg:0 12px 40px oklch(0 0 0 / 0.55);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{font-family:var(--font-body);font-size:var(--text-sm);color:var(--color-text);background:var(--color-bg);-webkit-font-smoothing:antialiased;}
+img{display:block;max-width:100%;}
+button{cursor:pointer;background:none;border:none;font:inherit;color:inherit;}
+a{text-decoration:none;color:inherit;}
+:focus-visible{outline:2px solid var(--color-primary);outline-offset:2px;border-radius:var(--radius-sm);}
+[font-variant-numeric]{font-variant-numeric:tabular-nums lining-nums;}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important;}}
+
+/* DASHBOARD SHELL */
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;grid-template-rows:1fr;height:100dvh;}
+
+/* SIDEBAR */
+.sidebar{
+  background:var(--color-sidebar-bg);
+  grid-row:1/-1;
+  display:flex;flex-direction:column;
+  overflow-y:auto;overscroll-behavior:contain;
+  border-right:1px solid var(--color-sidebar-border);
+  transition:width var(--transition);
+}
+.sidebar-logo{
+  display:flex;align-items:center;gap:var(--space-3);
+  padding:var(--space-5) var(--space-5);
+  border-bottom:1px solid var(--color-sidebar-border);
+  flex-shrink:0;
+}
+.sidebar-logo-text{font-size:var(--text-base);font-weight:700;color:#f0ece2;letter-spacing:-0.01em;}
+.sidebar-user{
+  display:flex;align-items:center;gap:var(--space-3);
+  padding:var(--space-4) var(--space-5);
+  border-bottom:1px solid var(--color-sidebar-border);
+  flex-shrink:0;
+}
+.user-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:linear-gradient(135deg,#1a4d8c,#f0a030);
+  display:flex;align-items:center;justify-content:center;
+  font-size:var(--text-xs);font-weight:700;color:#fff;flex-shrink:0;
+}
+.user-name{font-size:var(--text-xs);font-weight:600;color:#d0cdc1;}
+.user-role{font-size:10px;color:var(--color-sidebar-text);text-transform:uppercase;letter-spacing:0.08em;}
+.sidebar-nav{flex:1;padding:var(--space-4) var(--space-2);}
+.nav-section-label{
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;
+  color:var(--color-sidebar-text);opacity:0.6;
+  padding:var(--space-4) var(--space-3) var(--space-2);
+}
+.nav-item{
+  display:flex;align-items:center;gap:var(--space-3);
+  padding:var(--space-2) var(--space-3);
+  border-radius:var(--radius-md);
+  font-size:var(--text-xs);font-weight:500;
+  color:var(--color-sidebar-text);
+  cursor:pointer;
+  transition:background var(--transition),color var(--transition);
+  margin-bottom:2px;
+}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:#c0cdd8;}
+.nav-item.active{background:rgba(92,159,214,0.12);color:var(--color-sidebar-active);}
+.nav-item svg{flex-shrink:0;width:16px;height:16px;}
+.nav-badge{
+  margin-left:auto;font-size:10px;font-weight:700;
+  padding:1px 6px;border-radius:var(--radius-full);
+  background:rgba(240,160,48,0.2);color:var(--color-accent);
+}
+.sidebar-footer{
+  padding:var(--space-4) var(--space-2);
+  border-top:1px solid var(--color-sidebar-border);
+  flex-shrink:0;
+}
+
+/* MAIN AREA */
+.main-area{display:grid;grid-template-rows:auto 1fr;grid-column:2;overflow:hidden;}
+
+/* TOPBAR */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:var(--space-3) var(--space-6);
+  background:var(--color-surface);
+  border-bottom:1px solid var(--color-border);
+  z-index:10;flex-shrink:0;
+}
+.topbar-left{display:flex;align-items:center;gap:var(--space-3);}
+.breadcrumb{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--color-text-muted);}
+.breadcrumb-sep{color:var(--color-text-faint);}
+.breadcrumb-current{font-weight:600;color:var(--color-text);}
+.topbar-right{display:flex;align-items:center;gap:var(--space-3);}
+.topbar-btn{
+  display:flex;align-items:center;gap:var(--space-2);
+  padding:var(--space-2) var(--space-4);
+  border-radius:var(--radius-md);
+  font-size:var(--text-xs);font-weight:600;
+  transition:background var(--transition);
+}
+.topbar-btn.primary{background:var(--color-primary);color:var(--color-text-inverse);}
+.topbar-btn.primary:hover{background:var(--color-primary-hover);}
+.topbar-btn.ghost{border:1px solid var(--color-border);color:var(--color-text-muted);}
+.topbar-btn.ghost:hover{background:var(--color-surface-offset);color:var(--color-text);}
+.notif-btn{position:relative;padding:var(--space-2);border-radius:var(--radius-md);color:var(--color-text-muted);}
+.notif-btn:hover{background:var(--color-surface-offset);}
+.notif-dot{
+  position:absolute;top:6px;right:6px;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--color-accent);
+  border:2px solid var(--color-surface);
+}
+.theme-toggle-sm{padding:var(--space-2);border-radius:var(--radius-md);color:var(--color-text-muted);}
+.theme-toggle-sm:hover{background:var(--color-surface-offset);}
+
+/* MAIN CONTENT */
+.main-content{overflow-y:auto;overscroll-behavior:contain;padding:var(--space-6);}
+.page{display:none;}
+.page.active{display:block;}
+
+/* OVERVIEW PAGE */
+.page-title{font-size:var(--text-lg);font-weight:700;color:var(--color-text);margin-bottom:var(--space-1);}
+.page-sub{font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-6);}
+
+/* KPI ROW */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);margin-bottom:var(--space-6);}
+.kpi-card{
+  background:var(--color-surface);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);
+  padding:var(--space-5);
+  box-shadow:var(--shadow-sm);
+}
+.kpi-label{font-size:var(--text-xs);color:var(--color-text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:var(--space-3);}
+.kpi-value{font-size:var(--text-xl);font-weight:700;color:var(--color-text);font-variant-numeric:tabular-nums;line-height:1;}
+.kpi-delta{font-size:var(--text-xs);color:var(--color-text-muted);margin-top:var(--space-2);}
+.kpi-delta.up{color:var(--color-success);}
+.kpi-delta.warn{color:var(--color-warning);}
+
+/* GRID 2-COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-5);margin-bottom:var(--space-5);}
+.three-col{display:grid;grid-template-columns:2fr 1fr;gap:var(--space-5);margin-bottom:var(--space-5);}
+
+/* CARDS */
+.card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);box-shadow:var(--shadow-sm);}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:var(--space-4) var(--space-5);border-bottom:1px solid var(--color-divider);}
+.card-title{font-size:var(--text-sm);font-weight:700;}
+.card-action{font-size:var(--text-xs);color:var(--color-primary);cursor:pointer;}
+.card-action:hover{text-decoration:underline;}
+.card-body{padding:var(--space-5);}
+
+/* MISSION LIST */
+.mission-row{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr 80px;
+  align-items:center;gap:var(--space-4);
+  padding:var(--space-4) var(--space-5);
+  border-bottom:1px solid var(--color-divider);
+  transition:background var(--transition);
+  cursor:pointer;
+}
+.mission-row:last-child{border-bottom:none;}
+.mission-row:hover{background:var(--color-surface-offset);}
+.mission-row.header{background:var(--color-surface-offset);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--color-text-muted);cursor:default;}
+.mission-row.header:hover{background:var(--color-surface-offset);}
+.mission-name{font-size:var(--text-xs);font-weight:600;color:var(--color-text);}
+.mission-meta{font-size:10px;color:var(--color-text-muted);margin-top:2px;}
+.score-mini{display:flex;align-items:center;gap:var(--space-2);}
+.score-bar-mini{flex:1;height:5px;background:var(--color-surface-dynamic);border-radius:2px;overflow:hidden;}
+.score-fill{height:100%;border-radius:2px;}
+.score-fill.high{background:var(--color-success);}
+.score-fill.mid{background:var(--color-accent);}
+.score-fill.low{background:var(--color-error);}
+.score-pct{font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;min-width:28px;text-align:right;}
+
+/* STATUS BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);text-transform:uppercase;letter-spacing:0.06em;}
+.badge.active{background:oklch(from var(--color-success) l c h / 0.12);color:var(--color-success);}
+.badge.progress{background:oklch(from var(--color-primary) l c h / 0.12);color:var(--color-primary);}
+.badge.pending{background:oklch(from var(--color-warning) l c h / 0.12);color:var(--color-warning);}
+.badge.done{background:oklch(from var(--color-text-muted) l c h / 0.1);color:var(--color-text-muted);}
+.badge::before{content:'●';font-size:8px;}
+
+/* ACTIVITY FEED */
+.activity-item{display:flex;gap:var(--space-3);padding:var(--space-4) 0;border-bottom:1px solid var(--color-divider);}
+.activity-item:last-child{border-bottom:none;}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.activity-dot.success{background:var(--color-success);}
+.activity-dot.warn{background:var(--color-warning);}
+.activity-dot.info{background:var(--color-primary);}
+.activity-text{font-size:var(--text-xs);color:var(--color-text);flex:1;}
+.activity-text span{font-weight:600;}
+.activity-time{font-size:10px;color:var(--color-text-faint);}
+
+/* SCORE CIRCLE WIDGET */
+.score-widget{display:flex;align-items:center;justify-content:center;gap:var(--space-6);padding:var(--space-5);}
+.score-big{position:relative;width:80px;height:80px;}
+.score-big svg{transform:rotate(-90deg);}
+.score-big-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:var(--color-text);font-variant-numeric:tabular-nums;}
+.score-big-label{font-size:9px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.08em;}
+.score-breakdown{flex:1;display:flex;flex-direction:column;gap:var(--space-3);}
+.score-item-row{display:flex;align-items:center;gap:var(--space-3);}
+.score-item-label{font-size:var(--text-xs);color:var(--color-text-muted);min-width:110px;}
+.score-item-bar{flex:1;height:4px;background:var(--color-surface-dynamic);border-radius:2px;overflow:hidden;}
+.score-item-fill{height:100%;border-radius:2px;background:var(--color-primary);}
+.score-item-pct{font-size:10px;font-weight:700;color:var(--color-text-muted);min-width:28px;text-align:right;font-variant-numeric:tabular-nums;}
+
+/* CHECKLIST */
+.check-list{display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-5);}
+.check-row{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-2) 0;}
+.check-box{width:18px;height:18px;border-radius:4px;border:1.5px solid var(--color-border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.check-box.done{background:var(--color-success);border-color:var(--color-success);color:#fff;font-size:11px;}
+.check-box.warn{border-color:var(--color-warning);}
+.check-label{font-size:var(--text-xs);flex:1;}
+.check-label.done{color:var(--color-text-muted);text-decoration:line-through;}
+.check-status{font-size:10px;font-weight:600;padding:2px 6px;border-radius:var(--radius-full);}
+.check-status.ok{background:var(--color-success-hl);color:var(--color-success);}
+.check-status.missing{background:var(--color-warning-hl);color:var(--color-warning);}
+.check-status.review{background:var(--color-primary-hl);color:var(--color-primary);}
+
+/* PARTNER PANEL */
+.partner-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);padding:var(--space-5);}
+.partner-card{
+  padding:var(--space-4);
+  background:var(--color-surface-offset);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-lg);
+  display:flex;flex-direction:column;gap:var(--space-2);
+}
+.partner-type{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);}
+.partner-name{font-size:var(--text-xs);font-weight:600;}
+.partner-country{font-size:10px;color:var(--color-text-muted);}
+.partner-action{font-size:10px;font-weight:600;color:var(--color-primary);cursor:pointer;margin-top:var(--space-1);}
+.partner-add{
+  padding:var(--space-4);
+  background:var(--color-surface-offset);
+  border:1.5px dashed var(--color-border);
+  border-radius:var(--radius-lg);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;gap:var(--space-2);
+  cursor:pointer;
+  color:var(--color-text-faint);
+  font-size:var(--text-xs);
+  transition:border-color var(--transition),color var(--transition);
+}
+.partner-add:hover{border-color:var(--color-primary);color:var(--color-primary);}
+
+/* MISSIONS PAGE */
+.missions-toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-5);}
+.filter-row{display:flex;gap:var(--space-2);}
+.filter-btn{
+  padding:var(--space-2) var(--space-4);
+  border-radius:var(--radius-full);
+  font-size:var(--text-xs);font-weight:600;
+  border:1px solid var(--color-border);
+  color:var(--color-text-muted);
+  transition:all var(--transition);
+}
+.filter-btn:hover{border-color:var(--color-primary);color:var(--color-primary);}
+.filter-btn.active{background:var(--color-primary);border-color:var(--color-primary);color:var(--color-text-inverse);}
+
+.missions-full-table .mission-row{grid-template-columns:2fr 80px 1fr 110px 110px 100px 70px;}
+
+/* DOCUMENTS PAGE */
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);}
+.doc-card{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);padding:var(--space-5);
+  display:flex;flex-direction:column;gap:var(--space-3);
+  box-shadow:var(--shadow-sm);
+}
+.doc-icon{font-size:1.5rem;}
+.doc-name{font-size:var(--text-xs);font-weight:700;}
+.doc-mission{font-size:10px;color:var(--color-text-muted);}
+.doc-date{font-size:10px;color:var(--color-text-faint);}
+.doc-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:var(--space-3);border-top:1px solid var(--color-divider);}
+.doc-actions{display:flex;gap:var(--space-2);}
+.doc-action-btn{font-size:10px;color:var(--color-primary);cursor:pointer;}
+.doc-action-btn:hover{text-decoration:underline;}
+
+/* PROFILE PAGE */
+.profile-grid{display:grid;grid-template-columns:300px 1fr;gap:var(--space-5);}
+.profile-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-8);display:flex;flex-direction:column;align-items:center;text-align:center;gap:var(--space-4);box-shadow:var(--shadow-sm);}
+.profile-avatar-lg{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#1a4d8c,#f0a030);display:flex;align-items:center;justify-content:center;font-size:var(--text-xl);font-weight:800;color:#fff;}
+.profile-name{font-size:var(--text-base);font-weight:700;}
+.profile-email{font-size:var(--text-xs);color:var(--color-text-muted);}
+.profile-badge{margin-top:var(--space-2);font-size:var(--text-xs);font-weight:600;padding:var(--space-1) var(--space-4);background:var(--color-primary-hl);color:var(--color-primary);border-radius:var(--radius-full);}
+.profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-4);width:100%;margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--color-divider);}
+.profile-stat-val{font-size:var(--text-lg);font-weight:800;font-variant-numeric:tabular-nums;color:var(--color-text);}
+.profile-stat-label{font-size:10px;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.08em;}
+.form-section{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-sm);margin-bottom:var(--space-5);}
+.form-section-title{font-size:var(--text-sm);font-weight:700;margin-bottom:var(--space-5);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);}
+.form-group{display:flex;flex-direction:column;gap:var(--space-2);}
+.form-group.full{grid-column:1/-1;}
+.form-label{font-size:var(--text-xs);font-weight:600;color:var(--color-text-muted);}
+.form-input{
+  padding:var(--space-3) var(--space-4);
+  background:var(--color-surface-offset);
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-md);
+  font-size:var(--text-xs);color:var(--color-text);
+  transition:border-color var(--transition);
+}
+.form-input:focus{outline:none;border-color:var(--color-primary);}
+.form-actions{display:flex;justify-content:flex-end;gap:var(--space-3);margin-top:var(--space-5);}
+.btn-save{padding:var(--space-2) var(--space-6);background:var(--color-primary);color:var(--color-text-inverse);border-radius:var(--radius-md);font-size:var(--text-xs);font-weight:700;}
+.btn-save:hover{background:var(--color-primary-hover);}
+
+/* EMPTY STATE */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:var(--space-16);color:var(--color-text-muted);text-align:center;gap:var(--space-4);}
+.empty-icon{font-size:2.5rem;opacity:0.5;}
+.empty-title{font-size:var(--text-sm);font-weight:700;color:var(--color-text);}
+.empty-desc{font-size:var(--text-xs);max-width:32ch;color:var(--color-text-muted);}
+
+/* NOTIFICATION TOAST */
+.toast{
+  position:fixed;bottom:var(--space-6);right:var(--space-6);
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);padding:var(--space-4) var(--space-5);
+  box-shadow:var(--shadow-lg);
+  display:flex;align-items:center;gap:var(--space-3);
+  font-size:var(--text-xs);font-weight:500;
+  z-index:1000;
+  transform:translateY(100px);opacity:0;
+  transition:all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast-icon{font-size:1rem;}
+
+/* MODAL */
+.modal-overlay{
+  position:fixed;inset:0;background:oklch(0 0 0 / 0.5);
+  z-index:200;display:none;align-items:center;justify-content:center;
+}
+.modal-overlay.show{display:flex;}
+.modal{
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);width:min(520px,90vw);
+  box-shadow:var(--shadow-lg);
+  animation:modalIn 0.25s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(0.96) translateY(8px);}to{opacity:1;transform:none;}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--space-6);border-bottom:1px solid var(--color-divider);}
+.modal-title{font-size:var(--text-sm);font-weight:700;}
+.modal-close{color:var(--color-text-muted);padding:var(--space-1);border-radius:var(--radius-md);}
+.modal-close:hover{background:var(--color-surface-offset);}
+.modal-body{padding:var(--space-6);}
+.modal-footer{display:flex;justify-content:flex-end;gap:var(--space-3);padding:var(--space-4) var(--space-6);border-top:1px solid var(--color-divider);}
+
+/* MOBILE */
+@media(max-width:900px){
+  .app{grid-template-columns:1fr;}
+  .sidebar{display:none;}
+  .main-area{grid-column:1;}
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .two-col,.three-col,.missions-full-table .mission-row{grid-template-columns:1fr;}
+  .doc-grid{grid-template-columns:1fr 1fr;}
+  .profile-grid{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .doc-grid{grid-template-columns:1fr;}
+}
+
+/* MISSION DETAIL PAGE */
+.mission-detail-header{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  padding:var(--space-6);
+  background:var(--color-surface);border:1px solid var(--color-border);
+  border-radius:var(--radius-xl);margin-bottom:var(--space-5);
+  box-shadow:var(--shadow-sm);gap:var(--space-6);
+}
+.mission-detail-title{font-size:var(--text-lg);font-weight:800;margin-bottom:var(--space-2);}
+.mission-detail-meta{display:flex;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-3);}
+.meta-chip{display:flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--color-text-muted);}
+.meta-chip strong{color:var(--color-text);}
+.mission-detail-score{
+  display:flex;flex-direction:column;align-items:center;gap:var(--space-2);
+  padding:var(--space-5);background:var(--color-surface-offset);
+  border-radius:var(--radius-xl);flex-shrink:0;min-width:140px;text-align:center;
+}
+.detail-score-ring{position:relative;width:88px;height:88px;}
+.detail-score-ring svg{transform:rotate(-90deg);}
+.detail-score-num{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  font-size:1.3rem;font-weight:800;color:var(--color-text);
+  font-variant-numeric:tabular-nums;
+}
+.detail-score-sub{font-size:9px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.08em;}
+.detail-score-label{font-size:var(--text-xs);font-weight:700;color:var(--color-text-muted);}
+
+/* TAB BAR */
+.tab-bar{
+  display:flex;gap:0;border-bottom:2px solid var(--color-divider);
+  margin-bottom:var(--space-5);overflow-x:auto;
+}
+.tab{
+  padding:var(--space-3) var(--space-5);font-size:var(--text-xs);font-weight:600;
+  color:var(--color-text-muted);cursor:pointer;white-space:nowrap;
+  border-bottom:2px solid transparent;margin-bottom:-2px;
+  transition:color var(--transition),border-color var(--transition);
+}
+.tab:hover{color:var(--color-text);}
+.tab.active{color:var(--color-primary);border-bottom-color:var(--color-primary);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:var(--space-8);}
+.timeline::before{content:'';position:absolute;left:11px;top:0;bottom:0;width:2px;background:var(--color-border);}
+.tl-item{position:relative;margin-bottom:var(--space-6);}
+.tl-item:last-child{margin-bottom:0;}
+.tl-dot{
+  position:absolute;left:-29px;top:2px;
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid var(--color-border);background:var(--color-surface);
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;z-index:1;
+}
+.tl-dot.done{background:var(--color-success);border-color:var(--color-success);color:#fff;}
+.tl-dot.active{background:var(--color-accent);border-color:var(--color-accent);color:#0d1520;}
+.tl-dot.pending{border-color:var(--color-text-faint);}
+.tl-title{font-size:var(--text-xs);font-weight:700;margin-bottom:var(--space-1);}
+.tl-desc{font-size:10px;color:var(--color-text-muted);}
+.tl-date{font-size:10px;color:var(--color-text-faint);margin-top:2px;}
+
+/* FREIGHT QUOTE TABLE */
+.quote-table{width:100%;border-collapse:collapse;}
+.quote-table th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);padding:var(--space-3) var(--space-4);text-align:left;border-bottom:1px solid var(--color-divider);}
+.quote-table td{font-size:var(--text-xs);padding:var(--space-4);border-bottom:1px solid var(--color-divider);vertical-align:middle;}
+.quote-table tr:last-child td{border-bottom:none;}
+.quote-table tr:hover td{background:var(--color-surface-offset);}
+.quote-best{background:oklch(from var(--color-success) l c h / 0.06)!important;}
+.quote-best td{border-left:3px solid var(--color-success);}
+.quote-price{font-weight:800;font-variant-numeric:tabular-nums;}
+.select-btn{
+  padding:var(--space-1) var(--space-4);border-radius:var(--radius-full);
+  font-size:10px;font-weight:700;
+  background:var(--color-primary);color:var(--color-text-inverse);cursor:pointer;
+  border:none;font-family:inherit;
+  transition:background var(--transition);
+}
+.select-btn:hover{background:var(--color-primary-hover);}
+.select-btn.selected{background:var(--color-success);}
+
+/* NOTES */
+.notes-area{width:100%;min-height:120px;padding:var(--space-4);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-lg);font-family:inherit;font-size:var(--text-xs);color:var(--color-text);resize:vertical;}
+.notes-area:focus{outline:none;border-color:var(--color-primary);}
+
+/* BACK BTN */
+.back-btn{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--color-text-muted);margin-bottom:var(--space-5);cursor:pointer;}
+.back-btn:hover{color:var(--color-primary);}
+
+/* VALUE BREAKDOWN */
+.value-row{display:flex;justify-content:space-between;align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);font-size:var(--text-xs);}
+.value-row:last-child{border-bottom:none;font-weight:800;font-size:var(--text-sm);color:var(--color-text);}
+.value-label{color:var(--color-text-muted);}
+.value-amount{font-variant-numeric:tabular-nums;font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+	<img src="Logo.png"	alt="LATAM2EU"	style="height:64px;object-fit:contain;display:block;"/>
+    </div>
+    <div class="sidebar-user">
+      <div class="user-avatar">CF</div>
+      <div>
+        <div class="user-name"><span id="profile-name" style="display:none">Carlos Ferreira</span></div>
+        <div class="user-role">Exporter · <span id="profile-country">Brazil</span></div>
+      </div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" data-page="overview" onclick="navigate('overview',this)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>
+        Dashboard
+      </div>
+      <div class="nav-section-label">Missions</div>
+      <div class="nav-item" data-page="missions" onclick="navigate('missions',this)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/></svg>
+        All Missions
+        <span class="nav-badge">5</span>
+      </div>
+      <div class="nav-item" data-page="new-mission" onclick="openNewMission()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v6M5 8h6"/></svg>
+        New Mission
+      </div>
+      <div class="nav-section-label">Compliance</div>
+      <div class="nav-item" data-page="documents" onclick="navigate('documents',this)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 1h6l3 3v10a1 1 0 01-1 1H4a1 1 0 01-1-1V2a1 1 0 011-1z"/><path d="M9 1v4h3"/><path d="M5 8h6M5 11h4"/></svg>
+        Documents
+        <span class="nav-badge">3</span>
+      </div>
+      <div class="nav-item" data-page="compliance" onclick="navigate('compliance',this)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 5h5l-4 3 1.5 5L8 11l-4.5 3L5 9 1 6h5z"/></svg>
+        Compliance Score
+      </div>
+      <div class="nav-section-label">Network</div>
+      <div class="nav-item" data-page="partners" onclick="navigate('partners',this)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="5" r="3"/><circle cx="11" cy="11" r="3"/><path d="M7.5 7.5l1 1"/></svg>
+        Partners
+      </div>
+      <div class="nav-section-label">Account</div>
+      <div class="nav-item" data-page="profile" onclick="navigate('profile',this)">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="5" r="3"/><path d="M2 14c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
+        My Profile<span id="session-status" style="margin-left:8px;font-size:11px;color:#6e85a0;"></span>
+      </div>
+      <div class="nav-item" onclick="showToast('⚙️','Settings coming in Phase 2')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.1 3.1l1.4 1.4M11.5 11.5l1.4 1.4M3.1 12.9l1.4-1.4M11.5 4.5l1.4-1.4"/></svg>
+        Settings
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="nav-item" style="color:#e05a4a;" onclick="showToast('👋','You have been signed out')">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 5l3 3-3 3M6 8h7"/></svg>
+		<button id="logout-btn">Logout</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <div class="main-area">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="breadcrumb">
+          <span>LATAM2EU</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current" id="breadcrumb-text">Dashboard</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <button class="topbar-btn ghost" onclick="openNewMission()">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v6M5 8h6"/></svg>
+          New Mission
+        </button>
+        <button class="notif-btn" onclick="showToast('🔔','2 documents need review')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="notif-dot"></div>
+        </button>
+        <button class="theme-toggle-sm" data-theme-toggle>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT PAGES -->
+    <main class="main-content">
+
+      <!-- OVERVIEW / DASHBOARD -->
+      <div class="page active" id="page-overview">
+        <div class="page-title">Good morning, <span id="dash-greeting-name">Carlos</span> 👋</div>
+        <div class="page-sub">Sunday, 25 May 2026 · Brazil → Portugal corridor</div>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Active Missions</div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-delta up">↑ 1 since last month</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Avg. Score</div>
+            <div class="kpi-value">72%</div>
+            <div class="kpi-delta warn">⚠ 3 docs pending</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Partners Connected</div>
+            <div class="kpi-value">4</div>
+            <div class="kpi-delta up">↑ Freighter matched</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Completed</div>
+            <div class="kpi-value">2</div>
+            <div class="kpi-delta">Total missions shipped</div>
+          </div>
+        </div>
+
+        <div class="three-col">
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">My Missions</span>
+              <span class="card-action" onclick="navigate('missions',null)">View all →</span>
+            </div>
+            <div class="mission-row header">
+              <span>Mission</span><span>Score</span><span>Route</span><span>Status</span><span></span>
+            </div>
+            <div class="mission-row" onclick="navigate('missions',null)">
+              <div>
+                <div class="mission-name">Arabica Coffee Beans</div>
+                <div class="mission-meta">Santos → Leixões · 18t · Jun 2026</div>
+              </div>
+              <div class="score-mini">
+                <div class="score-bar-mini"><div class="score-fill mid" style="width:75%"></div></div>
+                <span class="score-pct" style="color:var(--color-accent)">75%</span>
+              </div>
+              <span style="font-size:var(--text-xs);color:var(--color-text-muted)">BR→PT</span>
+              <span class="badge active">Active</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 12l4-4-4-4"/></svg>
+            </div>
+            <div class="mission-row" onclick="navigate('missions',null)">
+              <div>
+                <div class="mission-name">Frozen Tropical Pulp</div>
+                <div class="mission-meta">Paranaguá → Setúbal · 12t · Jul 2026</div>
+              </div>
+              <div class="score-mini">
+                <div class="score-bar-mini"><div class="score-fill low" style="width:40%"></div></div>
+                <span class="score-pct" style="color:var(--color-error)">40%</span>
+              </div>
+              <span style="font-size:var(--text-xs);color:var(--color-text-muted)">BR→PT</span>
+              <span class="badge progress">In Progress</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 12l4-4-4-4"/></svg>
+            </div>
+            <div class="mission-row" onclick="navigate('missions',null)">
+              <div>
+                <div class="mission-name">Organic Soy Flour</div>
+                <div class="mission-meta">Rio Grande → Porto · 45t · Aug 2026</div>
+              </div>
+              <div class="score-mini">
+                <div class="score-bar-mini"><div class="score-fill low" style="width:30%"></div></div>
+                <span class="score-pct" style="color:var(--color-error)">30%</span>
+              </div>
+              <span style="font-size:var(--text-xs);color:var(--color-text-muted)">BR→PT</span>
+              <span class="badge pending">Pending</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 12l4-4-4-4"/></svg>
+            </div>
+            <div class="mission-row" style="opacity:.5">
+              <div>
+                <div class="mission-name">Açaí Freeze-Dried Powder</div>
+                <div class="mission-meta">Manaus → Sines · 10t · Jan 2026</div>
+              </div>
+              <div class="score-mini">
+                <div class="score-bar-mini"><div class="score-fill high" style="width:100%"></div></div>
+                <span class="score-pct" style="color:var(--color-success)">100%</span>
+              </div>
+              <span style="font-size:var(--text-xs);color:var(--color-text-muted)">BR→PT</span>
+              <span class="badge done">Done</span>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 12l4-4-4-4"/></svg>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:var(--space-5);">
+            <div class="card">
+              <div class="card-header"><span class="card-title">Top Mission Score</span><span class="card-action" onclick="navigate('compliance',null)">Details →</span></div>
+              <div class="score-widget">
+                <div class="score-big">
+                  <svg width="80" height="80" viewBox="0 0 80 80">
+                    <circle cx="40" cy="40" r="32" fill="none" stroke="var(--color-surface-dynamic)" stroke-width="7"/>
+                    <circle cx="40" cy="40" r="32" fill="none" stroke="var(--color-accent)" stroke-width="7" stroke-dasharray="201" stroke-dashoffset="50" stroke-linecap="round"/>
+                  </svg>
+                  <div class="score-big-num">75%<div class="score-big-label">ready</div></div>
+                </div>
+                <div class="score-breakdown">
+                  <div class="score-item-row"><span class="score-item-label">Documentation</span><div class="score-item-bar"><div class="score-item-fill" style="width:80%"></div></div><span class="score-item-pct">80%</span></div>
+                  <div class="score-item-row"><span class="score-item-label">Compliance</span><div class="score-item-bar"><div class="score-item-fill" style="width:70%;background:var(--color-accent)"></div></div><span class="score-item-pct">70%</span></div>
+                  <div class="score-item-row"><span class="score-item-label">Partners</span><div class="score-item-bar"><div class="score-item-fill" style="width:75%"></div></div><span class="score-item-pct">75%</span></div>
+                  <div class="score-item-row"><span class="score-item-label">Logistics</span><div class="score-item-bar"><div class="score-item-fill" style="width:50%;background:var(--color-error)"></div></div><span class="score-item-pct">50%</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><span class="card-title">Recent Activity</span></div>
+              <div style="padding:var(--space-4) var(--space-5)">
+                <div class="activity-item">
+                  <div class="activity-dot success"></div>
+                  <div class="activity-text"><span>Phytosanitary Certificate</span> verified for Coffee Mission</div>
+                  <div class="activity-time">2h ago</div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot warn"></div>
+                  <div class="activity-text"><span>Custom Declaration</span> needs upload — Pulp Mission</div>
+                  <div class="activity-time">5h ago</div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot info"></div>
+                  <div class="activity-text"><span>LogPort Leixões</span> connected as Freighter partner</div>
+                  <div class="activity-time">1d ago</div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot success"></div>
+                  <div class="activity-text"><span>Mission #045</span> marked Completed · 100% score</div>
+                  <div class="activity-time">3d ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISSIONS PAGE -->
+      <div class="page" id="page-missions">
+        <div class="page-title">All Missions</div>
+        <div class="page-sub">Manage and track all your export missions.</div>
+        <div class="missions-toolbar">
+          <div class="filter-row">
+            <button class="filter-btn active" onclick="filterMissions(this,'all')">All (5)</button>
+            <button class="filter-btn" onclick="filterMissions(this,'active')">Active (2)</button>
+            <button class="filter-btn" onclick="filterMissions(this,'progress')">In Progress (1)</button>
+            <button class="filter-btn" onclick="filterMissions(this,'pending')">Pending (1)</button>
+            <button class="filter-btn" onclick="filterMissions(this,'done')">Completed (2)</button>
+          </div>
+          <button class="topbar-btn primary" onclick="openNewMission()">+ New Mission</button>
+        </div>
+        <div class="card missions-full-table">
+          <div class="mission-row header">
+            <span>Mission / Product</span><span>Score</span><span>Route</span><span>Ship Date</span><span>Value (EUR)</span><span>Status</span><span></span>
+          </div>
+          <div class="mission-row" data-status="active">
+            <div><div class="mission-name">Arabica Coffee Beans</div><div class="mission-meta">Santos → Leixões · 18 tons</div></div>
+            <div class="score-mini"><div class="score-bar-mini"><div class="score-fill mid" style="width:75%"></div></div><span class="score-pct" style="color:var(--color-accent)">75%</span></div>
+            <span style="font-size:var(--text-xs)">BR→PT</span>
+            <div><div style="font-size:var(--text-xs);font-weight:600">15 Jun 2026</div><div style="font-size:10px;color:var(--color-text-muted)">ETD Santos</div></div>
+            <div><div style="font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums">€ 42,300</div><div style="font-size:10px;color:var(--color-text-muted)">FOB · 18t</div></div>
+            <span class="badge active">Active</span>
+            <span class="card-action" onclick="openMissionDetail()">Open →</span>
+          </div>
+          <div class="mission-row" data-status="active">
+            <div><div class="mission-name">Frozen Tropical Pulp</div><div class="mission-meta">Paranaguá → Setúbal · 12 tons</div></div>
+            <div class="score-mini"><div class="score-bar-mini"><div class="score-fill low" style="width:40%"></div></div><span class="score-pct" style="color:var(--color-error)">40%</span></div>
+            <span style="font-size:var(--text-xs)">BR→PT</span>
+            <div><div style="font-size:var(--text-xs);font-weight:600">08 Jul 2026</div><div style="font-size:10px;color:var(--color-text-muted)">ETD Paranaguá</div></div>
+            <div><div style="font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums">€ 28,800</div><div style="font-size:10px;color:var(--color-text-muted)">FOB · 12t</div></div>
+            <span class="badge active">Active</span>
+            <span class="card-action" onclick="openMissionDetail()">Open →</span>
+          </div>
+          <div class="mission-row" data-status="progress">
+            <div><div class="mission-name">Organic Soy Flour</div><div class="mission-meta">Rio Grande → Porto · 45 tons</div></div>
+            <div class="score-mini"><div class="score-bar-mini"><div class="score-fill low" style="width:30%"></div></div><span class="score-pct" style="color:var(--color-error)">30%</span></div>
+            <span style="font-size:var(--text-xs)">BR→PT</span>
+            <div><div style="font-size:var(--text-xs);font-weight:600">20 Aug 2026</div><div style="font-size:10px;color:var(--color-text-muted)">ETD Rio Grande</div></div>
+            <div><div style="font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums">€ 67,500</div><div style="font-size:10px;color:var(--color-text-muted)">CIF · 45t</div></div>
+            <span class="badge progress">In Progress</span>
+            <span class="card-action" onclick="openMissionDetail()">Open →</span>
+          </div>
+          <div class="mission-row" data-status="pending">
+            <div><div class="mission-name">Specialty Cacao Nibs</div><div class="mission-meta">Salvador → Lisboa · 8 tons</div></div>
+            <div class="score-mini"><div class="score-bar-mini"><div class="score-fill low" style="width:15%"></div></div><span class="score-pct" style="color:var(--color-error)">15%</span></div>
+            <span style="font-size:var(--text-xs)">BR→PT</span>
+            <div><div style="font-size:var(--text-xs);font-weight:600">05 Sep 2026</div><div style="font-size:10px;color:var(--color-text-muted)">ETD Salvador</div></div>
+            <div><div style="font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums">€ 19,200</div><div style="font-size:10px;color:var(--color-text-muted)">FOB · 8t</div></div>
+            <span class="badge pending">Pending</span>
+            <span class="card-action" onclick="openMissionDetail()">Open →</span>
+          </div>
+          <div class="mission-row" data-status="done" style="opacity:.55">
+            <div><div class="mission-name">Açaí Freeze-Dried Powder</div><div class="mission-meta">Manaus → Sines · 10 tons</div></div>
+            <div class="score-mini"><div class="score-bar-mini"><div class="score-fill high" style="width:100%"></div></div><span class="score-pct" style="color:var(--color-success)">100%</span></div>
+            <span style="font-size:var(--text-xs)">BR→PT</span>
+            <div><div style="font-size:var(--text-xs);font-weight:600">12 Jan 2026</div><div style="font-size:10px;color:var(--color-text-muted)">Delivered</div></div>
+            <div><div style="font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums">€ 31,000</div><div style="font-size:10px;color:var(--color-text-muted)">CIF · 10t</div></div>
+            <span class="badge done">Done</span>
+            <span class="card-action">View →</span>
+          </div>
+          <div class="mission-row" data-status="done" style="opacity:.55">
+            <div><div class="mission-name">Green Stevia Extract</div><div class="mission-meta">Santos → Leixões · 6 tons</div></div>
+            <div class="score-mini"><div class="score-bar-mini"><div class="score-fill high" style="width:100%"></div></div><span class="score-pct" style="color:var(--color-success)">100%</span></div>
+            <span style="font-size:var(--text-xs)">BR→PT</span>
+            <div><div style="font-size:var(--text-xs);font-weight:600">18 Mar 2026</div><div style="font-size:10px;color:var(--color-text-muted)">Delivered</div></div>
+            <div><div style="font-size:var(--text-xs);font-weight:700;font-variant-numeric:tabular-nums">€ 22,800</div><div style="font-size:10px;color:var(--color-text-muted)">FOB · 6t</div></div>
+            <span class="badge done">Done</span>
+            <span class="card-action">View →</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS PAGE -->
+      <div class="page" id="page-documents">
+        <div class="page-title">Documents</div>
+        <div class="page-sub">Upload and manage compliance documents for your missions.</div>
+        <div class="doc-grid">
+          <div class="doc-card">
+            <div class="doc-icon">🌿</div>
+            <div><div class="doc-name">Phytosanitary Certificate</div><div class="doc-mission">Coffee Beans Mission</div><div class="doc-date">Uploaded 23 May 2026</div></div>
+            <span class="badge active" style="width:fit-content">Verified</span>
+            <div class="doc-footer"><div class="doc-actions"><span class="doc-action-btn">View</span><span class="doc-action-btn">Download</span></div><span style="font-size:10px;color:var(--color-text-faint)">PDF · 2.3 MB</span></div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-icon">📄</div>
+            <div><div class="doc-name">EUR.1 Movement Certificate</div><div class="doc-mission">Coffee Beans Mission</div><div class="doc-date">Uploaded 22 May 2026</div></div>
+            <span class="badge active" style="width:fit-content">Verified</span>
+            <div class="doc-footer"><div class="doc-actions"><span class="doc-action-btn">View</span><span class="doc-action-btn">Download</span></div><span style="font-size:10px;color:var(--color-text-faint)">PDF · 1.1 MB</span></div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-icon">🧾</div>
+            <div><div class="doc-name">Commercial Invoice (3 copies)</div><div class="doc-mission">Coffee Beans Mission</div><div class="doc-date">Uploaded 20 May 2026</div></div>
+            <span class="badge active" style="width:fit-content">Verified</span>
+            <div class="doc-footer"><div class="doc-actions"><span class="doc-action-btn">View</span><span class="doc-action-btn">Download</span></div><span style="font-size:10px;color:var(--color-text-faint)">PDF · 0.8 MB</span></div>
+          </div>
+          <div class="doc-card" style="border-color:var(--color-warning);border-style:dashed">
+            <div class="doc-icon">📋</div>
+            <div><div class="doc-name">Customs Declaration</div><div class="doc-mission">Coffee Beans Mission</div><div class="doc-date">Not yet uploaded</div></div>
+            <span class="badge pending" style="width:fit-content">Missing</span>
+            <div class="doc-footer"><button class="topbar-btn primary" style="font-size:10px;padding:4px 12px" onclick="showToast('📎','Upload feature coming soon')">Upload →</button></div>
+          </div>
+          <div class="doc-card" style="border-color:var(--color-warning);border-style:dashed">
+            <div class="doc-icon">🚢</div>
+            <div><div class="doc-name">Bill of Lading</div><div class="doc-mission">Tropical Pulp Mission</div><div class="doc-date">Not yet uploaded</div></div>
+            <span class="badge pending" style="width:fit-content">Missing</span>
+            <div class="doc-footer"><button class="topbar-btn primary" style="font-size:10px;padding:4px 12px" onclick="showToast('📎','Upload feature coming soon')">Upload →</button></div>
+          </div>
+          <div class="doc-card" style="border-color:var(--color-warning);border-style:dashed">
+            <div class="doc-icon">🧪</div>
+            <div><div class="doc-name">Lab Analysis Report</div><div class="doc-mission">Tropical Pulp Mission</div><div class="doc-date">Not yet uploaded</div></div>
+            <span class="badge pending" style="width:fit-content">Missing</span>
+            <div class="doc-footer"><button class="topbar-btn primary" style="font-size:10px;padding:4px 12px" onclick="showToast('📎','Upload feature coming soon')">Upload →</button></div>
+          </div>
+          <div class="doc-card">
+            <div class="doc-icon">📦</div>
+            <div><div class="doc-name">Packing List</div><div class="doc-mission">Açaí Mission (Completed)</div><div class="doc-date">Uploaded 10 Jan 2026</div></div>
+            <span class="badge done" style="width:fit-content">Archived</span>
+            <div class="doc-footer"><div class="doc-actions"><span class="doc-action-btn">View</span><span class="doc-action-btn">Download</span></div><span style="font-size:10px;color:var(--color-text-faint)">PDF · 0.5 MB</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMPLIANCE PAGE -->
+      <div class="page" id="page-compliance">
+        <div class="page-title">Compliance Score</div>
+        <div class="page-sub">Track your document readiness for each active mission.</div>
+        <div class="two-col">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Mission: Arabica Coffee Beans</span><span class="badge active">75% Ready</span></div>
+            <div class="check-list">
+              <div class="check-row"><div class="check-box done">✓</div><span class="check-label done">Phytosanitary Certificate</span><span class="check-status ok">Verified</span></div>
+              <div class="check-row"><div class="check-box done">✓</div><span class="check-label done">EUR.1 Movement Certificate</span><span class="check-status ok">Verified</span></div>
+              <div class="check-row"><div class="check-box done">✓</div><span class="check-label done">Commercial Invoice (3x)</span><span class="check-status ok">Verified</span></div>
+              <div class="check-row"><div class="check-box done">✓</div><span class="check-label done">Packing List</span><span class="check-status ok">Verified</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">Customs Declaration (DU-E)</span><span class="check-status missing">Missing</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">Port Departure Booking Confirmation</span><span class="check-status missing">Missing</span></div>
+              <div class="check-row"><div class="check-box" style="border-color:var(--color-primary)"></div><span class="check-label">Certificate of Origin</span><span class="check-status review">In Review</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Mission: Frozen Tropical Pulp</span><span class="badge pending">40% Ready</span></div>
+            <div class="check-list">
+              <div class="check-row"><div class="check-box done">✓</div><span class="check-label done">Commercial Invoice</span><span class="check-status ok">Verified</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">Phytosanitary Certificate</span><span class="check-status missing">Missing</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">EUR.1 Certificate</span><span class="check-status missing">Missing</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">Lab Analysis Report (Cold Chain)</span><span class="check-status missing">Missing</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">Bill of Lading</span><span class="check-status missing">Missing</span></div>
+              <div class="check-row"><div class="check-box warn"></div><span class="check-label">Customs Declaration (DU-E)</span><span class="check-status missing">Missing</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PARTNERS PAGE -->
+      <div class="page" id="page-partners">
+        <div class="page-title">Partners</div>
+        <div class="page-sub">Your connected EU supply chain partners.</div>
+        <div class="two-col" style="margin-bottom:var(--space-5)">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Linked to Coffee Mission</span><span class="card-action" onclick="showToast('🤝','Match new partner coming in Phase 2')">+ Match Partner</span></div>
+            <div class="partner-grid">
+              <div class="partner-card">
+                <div class="partner-type">🚢 Freighter</div>
+                <div class="partner-name">LogPort Leixões SA</div>
+                <div class="partner-country">🇵🇹 Matosinhos, Portugal</div>
+                <div class="partner-action" onclick="showToast('💬','Messaging coming in Phase 2')">Contact →</div>
+              </div>
+              <div class="partner-card">
+                <div class="partner-type">🏭 Distributor</div>
+                <div class="partner-name">Iberian Foods Group</div>
+                <div class="partner-country">🇵🇹 Lisboa, Portugal</div>
+                <div class="partner-action" onclick="showToast('💬','Messaging coming in Phase 2')">Contact →</div>
+              </div>
+              <div class="partner-card">
+                <div class="partner-type">🛒 Reseller</div>
+                <div class="partner-name">Mercado Bio LDA</div>
+                <div class="partner-country">🇵🇹 Porto, Portugal</div>
+                <div class="partner-action" onclick="showToast('💬','Messaging coming in Phase 2')">Contact →</div>
+              </div>
+              <div class="partner-add" onclick="showToast('🔗','Partner discovery coming in Phase 2')">
+                <span style="font-size:1.2rem">+</span>
+                <span>Add Partner</span>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Awaiting Connection</span></div>
+            <div style="padding:var(--space-5)">
+              <div class="activity-item">
+                <div class="activity-dot info"></div>
+                <div class="activity-text"><span>AtlânticoCargo</span> expressed interest in Pulp Mission</div>
+                <div class="activity-time">Today</div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-dot info"></div>
+                <div class="activity-text"><span>GreenLeaf Imports</span> wants to negotiate Soy Flour</div>
+                <div class="activity-time">Yesterday</div>
+              </div>
+              <div class="empty" style="padding:var(--space-8)">
+                <div class="empty-icon">🔍</div>
+                <div class="empty-title">Discoverable by EU partners</div>
+                <div class="empty-desc">Your missions are visible to verified EU distributors and resellers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE PAGE -->
+      <div class="page" id="page-profile">
+        <div class="page-title">My Profile</div>
+        <div class="page-sub">Manage your exporter account and company details.</div>
+       
+		<div id="profile-container" class="page-section" style="display:block;">
+			<iframe id="profile-frame" src="myprofile.html" title="My profile" style="width:100%;height:100vh;border:0;"></iframe>
+		</div>
+ 
+      </div>
+
+
+      <!-- MISSION DETAIL PAGE -->
+      <div class="page" id="page-mission-detail">
+        <div class="back-btn" onclick="navigate('missions', document.querySelector('[data-page=missions]'))">
+          ← Back to All Missions
+        </div>
+
+        <!-- HEADER CARD -->
+        <div class="mission-detail-header">
+          <div style="flex:1">
+            <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-2)">
+              <span class="badge active">Active</span>
+              <span style="font-size:10px;color:var(--color-text-faint)">Mission #047</span>
+            </div>
+            <div class="mission-detail-title">Arabica Coffee Beans</div>
+            <div class="mission-detail-meta">
+              <div class="meta-chip">🚢 <strong>Santos</strong> → <strong>Leixões</strong></div>
+              <div class="meta-chip">📦 <strong>18 tons</strong> · FCL 20'</div>
+              <div class="meta-chip">📅 ETD <strong>15 Jun 2026</strong></div>
+              <div class="meta-chip">💶 <strong>€ 42,300</strong> FOB</div>
+              <div class="meta-chip">🏭 Iberian Foods Group</div>
+            </div>
+            <div style="margin-top:var(--space-5);display:flex;gap:var(--space-3);">
+              <button class="topbar-btn primary" onclick="showToast('📎','Upload feature coming soon')">+ Upload Document</button>
+              <button class="topbar-btn ghost" onclick="showToast('💬','Messaging coming in Phase 2')">Message Partner</button>
+              <button class="topbar-btn ghost" onclick="showToast('📤','Export report coming soon')">Export PDF</button>
+            </div>
+          </div>
+          <div class="mission-detail-score">
+            <div class="detail-score-ring">
+              <svg width="88" height="88" viewBox="0 0 88 88">
+                <circle cx="44" cy="44" r="36" fill="none" stroke="var(--color-surface-dynamic)" stroke-width="8"/>
+                <circle cx="44" cy="44" r="36" fill="none" stroke="var(--color-accent)" stroke-width="8"
+                  stroke-dasharray="226" stroke-dashoffset="57" stroke-linecap="round"/>
+              </svg>
+              <div class="detail-score-num">75%<div class="detail-score-sub">ready</div></div>
+            </div>
+            <div class="detail-score-label">Preparedness Score</div>
+            <div style="font-size:10px;color:var(--color-warning);margin-top:var(--space-1);">3 items missing</div>
+          </div>
+        </div>
+
+        <!-- SCORE BAR BREAKDOWN -->
+        <div class="card" style="margin-bottom:var(--space-5)">
+          <div class="card-header"><span class="card-title">Score Breakdown</span></div>
+          <div style="padding:var(--space-5);display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-6);">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);margin-bottom:var(--space-2)"><span style="color:var(--color-text-muted)">Documentation</span><span style="font-weight:700;font-variant-numeric:tabular-nums">80%</span></div>
+              <div class="score-bar-mini" style="height:6px"><div class="score-fill mid" style="width:80%;height:100%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);margin-bottom:var(--space-2)"><span style="color:var(--color-text-muted)">Compliance</span><span style="font-weight:700;font-variant-numeric:tabular-nums">70%</span></div>
+              <div class="score-bar-mini" style="height:6px"><div class="score-fill mid" style="width:70%;height:100%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);margin-bottom:var(--space-2)"><span style="color:var(--color-text-muted)">Partners</span><span style="font-weight:700;font-variant-numeric:tabular-nums">75%</span></div>
+              <div class="score-bar-mini" style="height:6px"><div class="score-fill" style="width:75%;height:100%;background:var(--color-primary)"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);margin-bottom:var(--space-2)"><span style="color:var(--color-text-muted)">Logistics</span><span style="font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-error)">50%</span></div>
+              <div class="score-bar-mini" style="height:6px"><div class="score-fill low" style="width:50%;height:100%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TABS -->
+        <div class="tab-bar">
+          <div class="tab active" onclick="switchTab(this,'tab-docs')">📋 Documents</div>
+          <div class="tab" onclick="switchTab(this,'tab-timeline')">🗓 Timeline</div>
+          <div class="tab" onclick="switchTab(this,'tab-freight')">🚢 Freight Quotes</div>
+          <div class="tab" onclick="switchTab(this,'tab-partners')">🤝 Partners</div>
+          <div class="tab" onclick="switchTab(this,'tab-financials')">💶 Financials</div>
+          <div class="tab" onclick="switchTab(this,'tab-notes')">📝 Notes</div>
+        </div>
+
+        <!-- TAB: DOCUMENTS -->
+        <div class="tab-panel active" id="tab-docs">
+          <div class="check-list" style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5);">
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);padding:var(--space-2) 0;border-bottom:1px solid var(--color-divider);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-muted);">
+              <span>Document</span><span>Deadline</span><span>Status</span><span>Action</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box done">✓</div><div><div style="font-size:var(--text-xs);font-weight:600">Phytosanitary Certificate</div><div style="font-size:10px;color:var(--color-text-muted)">Uploaded 23 May · PDF 2.3MB</div></div></div>
+              <span style="font-size:10px;color:var(--color-text-muted)">01 Jun 2026</span>
+              <span class="check-status ok">Verified</span>
+              <span class="doc-action-btn" onclick="showToast('📄','Opening document...')">View</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box done">✓</div><div><div style="font-size:var(--text-xs);font-weight:600">EUR.1 Movement Certificate</div><div style="font-size:10px;color:var(--color-text-muted)">Uploaded 22 May · PDF 1.1MB</div></div></div>
+              <span style="font-size:10px;color:var(--color-text-muted)">01 Jun 2026</span>
+              <span class="check-status ok">Verified</span>
+              <span class="doc-action-btn" onclick="showToast('📄','Opening document...')">View</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box done">✓</div><div><div style="font-size:var(--text-xs);font-weight:600">Commercial Invoice (3 copies)</div><div style="font-size:10px;color:var(--color-text-muted)">Uploaded 20 May · PDF 0.8MB</div></div></div>
+              <span style="font-size:10px;color:var(--color-text-muted)">01 Jun 2026</span>
+              <span class="check-status ok">Verified</span>
+              <span class="doc-action-btn" onclick="showToast('📄','Opening document...')">View</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box done">✓</div><div><div style="font-size:var(--text-xs);font-weight:600">Packing List</div><div style="font-size:10px;color:var(--color-text-muted)">Uploaded 20 May · PDF 0.4MB</div></div></div>
+              <span style="font-size:10px;color:var(--color-text-muted)">01 Jun 2026</span>
+              <span class="check-status ok">Verified</span>
+              <span class="doc-action-btn" onclick="showToast('📄','Opening document...')">View</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box" style="border-color:var(--color-primary)"></div><div><div style="font-size:var(--text-xs);font-weight:600">Certificate of Origin</div><div style="font-size:10px;color:var(--color-text-muted)">Submitted · Awaiting authority stamp</div></div></div>
+              <span style="font-size:10px;color:var(--color-text-muted)">05 Jun 2026</span>
+              <span class="check-status review">In Review</span>
+              <span class="doc-action-btn" style="color:var(--color-text-muted)">—</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;border-bottom:1px solid var(--color-divider);">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box warn"></div><div><div style="font-size:var(--text-xs);font-weight:600">Customs Declaration (DU-E)</div><div style="font-size:10px;color:var(--color-warning)">⚠ Not uploaded — required before ETD</div></div></div>
+              <span style="font-size:10px;color:var(--color-warning)">10 Jun 2026</span>
+              <span class="check-status missing">Missing</span>
+              <button class="select-btn" onclick="showToast('📎','Upload feature coming soon')">Upload</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 120px 100px 80px;gap:var(--space-4);align-items:center;padding:var(--space-3) 0;">
+              <div style="display:flex;align-items:center;gap:var(--space-3)"><div class="check-box warn"></div><div><div style="font-size:var(--text-xs);font-weight:600">Port Departure Booking Confirmation</div><div style="font-size:10px;color:var(--color-warning)">⚠ Awaiting freighter confirmation</div></div></div>
+              <span style="font-size:10px;color:var(--color-warning)">12 Jun 2026</span>
+              <span class="check-status missing">Missing</span>
+              <button class="select-btn" onclick="showToast('📎','Upload feature coming soon')">Upload</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: TIMELINE -->
+        <div class="tab-panel" id="tab-timeline">
+          <div class="card"><div class="card-body">
+            <div class="timeline">
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">Mission Created</div><div class="tl-desc">Mission #047 opened. Product and volume defined.</div><div class="tl-date">12 May 2026</div></div>
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">Core Documents Uploaded</div><div class="tl-desc">Phytosanitary Certificate, EUR.1, Commercial Invoice and Packing List verified.</div><div class="tl-date">20–23 May 2026</div></div>
+              <div class="tl-item"><div class="tl-dot done">✓</div><div class="tl-title">Partners Matched</div><div class="tl-desc">LogPort Leixões (Freighter), Iberian Foods Group (Distributor) and Mercado Bio (Reseller) connected.</div><div class="tl-date">24 May 2026</div></div>
+              <div class="tl-item"><div class="tl-dot active">●</div><div class="tl-title">Compliance Review in Progress</div><div class="tl-desc">Certificate of Origin submitted to CAMEX. Customs Declaration (DU-E) still missing.</div><div class="tl-date">Now</div></div>
+              <div class="tl-item"><div class="tl-dot pending"></div><div class="tl-title">Freight Booking Confirmation</div><div class="tl-desc">Awaiting booking confirmation from LogPort Leixões for Santos → Leixões route.</div><div class="tl-date">Target: 12 Jun 2026</div></div>
+              <div class="tl-item"><div class="tl-dot pending"></div><div class="tl-title">Port of Santos — Cargo Ready</div><div class="tl-desc">Cargo staged at Santos terminal. All documents must be complete before this step.</div><div class="tl-date">Target: 13 Jun 2026</div></div>
+              <div class="tl-item"><div class="tl-dot pending"></div><div class="tl-title">ETD — Vessel Departure</div><div class="tl-desc">Estimated departure from Porto de Santos.</div><div class="tl-date">Target: 15 Jun 2026</div></div>
+              <div class="tl-item"><div class="tl-dot pending"></div><div class="tl-title">ETA — Leixões Arrival</div><div class="tl-desc">Estimated arrival at Terminal de Contentores de Leixões. Customs clearance on arrival.</div><div class="tl-date">Target: 01 Jul 2026</div></div>
+              <div class="tl-item"><div class="tl-dot pending"></div><div class="tl-title">Mission Completed</div><div class="tl-desc">Cargo released to Iberian Foods Group. Score archived at 100%.</div><div class="tl-date">Target: 03 Jul 2026</div></div>
+            </div>
+          </div></div>
+        </div>
+
+        <!-- TAB: FREIGHT QUOTES -->
+        <div class="tab-panel" id="tab-freight">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Freight Quotes — Santos → Leixões · FCL 20' · ~18t</span><span class="card-action" onclick="showToast('🔄','Refreshing quotes...')">Refresh quotes</span></div>
+            <div style="padding:var(--space-4) var(--space-5)">
+              <table class="quote-table">
+                <thead>
+                  <tr>
+                    <th>Operator</th><th>Transit Time</th><th>Departure</th><th>Arrival ETA</th><th>Incoterm</th><th>Price (EUR)</th><th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="quote-best">
+                    <td><div style="font-weight:700">LogPort Leixões SA</div><div style="font-size:10px;color:var(--color-text-muted)">🇵🇹 Direct service</div></td>
+                    <td>16 days</td><td>15 Jun</td><td>01 Jul</td>
+                    <td><span class="check-status ok">FOB</span></td>
+                    <td class="quote-price" style="color:var(--color-success)">€ 3,200</td>
+                    <td><button class="select-btn selected" onclick="showToast('✅','LogPort Leixões selected as freighter')">Selected ✓</button></td>
+                  </tr>
+                  <tr>
+                    <td><div style="font-weight:700">AtlânticoCargo</div><div style="font-size:10px;color:var(--color-text-muted)">🇵🇹 Via Sines</div></td>
+                    <td>18 days</td><td>14 Jun</td><td>02 Jul</td>
+                    <td><span class="check-status review">CIF</span></td>
+                    <td class="quote-price">€ 3,650</td>
+                    <td><button class="select-btn" onclick="showToast('🚢','AtlânticoCargo selected')">Select</button></td>
+                  </tr>
+                  <tr>
+                    <td><div style="font-weight:700">MSC Portugal</div><div style="font-size:10px;color:var(--color-text-muted)">🌍 Multi-stop</div></td>
+                    <td>22 days</td><td>12 Jun</td><td>04 Jul</td>
+                    <td><span class="check-status review">CIF</span></td>
+                    <td class="quote-price">€ 2,980</td>
+                    <td><button class="select-btn" onclick="showToast('🚢','MSC Portugal selected')">Select</button></td>
+                  </tr>
+                  <tr>
+                    <td><div style="font-weight:700">Maersk BR-PT</div><div style="font-size:10px;color:var(--color-text-muted)">🌍 Weekly service</div></td>
+                    <td>20 days</td><td>18 Jun</td><td>08 Jul</td>
+                    <td><span class="check-status missing">FOB</span></td>
+                    <td class="quote-price">€ 3,450</td>
+                    <td><button class="select-btn" onclick="showToast('🚢','Maersk selected')">Select</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="padding:var(--space-4) var(--space-5);background:var(--color-surface-offset);border-top:1px solid var(--color-divider);border-radius:0 0 var(--radius-xl) var(--radius-xl);font-size:10px;color:var(--color-text-muted);">
+              ℹ️ Prices are reference rates. Final quotes subject to confirmation with each operator. Updated 25 May 2026.
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: PARTNERS -->
+        <div class="tab-panel" id="tab-partners">
+          <div class="two-col">
+            <div class="card">
+              <div class="card-header"><span class="card-title">Connected Partners</span><span class="card-action" onclick="showToast('🔗','Partner discovery coming in Phase 2')">+ Add Partner</span></div>
+              <div style="padding:var(--space-5);display:flex;flex-direction:column;gap:var(--space-4);">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-4);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-lg);">
+                  <div>
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:4px">🚢 Freighter</div>
+                    <div style="font-size:var(--text-xs);font-weight:700">LogPort Leixões SA</div>
+                    <div style="font-size:10px;color:var(--color-text-muted)">🇵🇹 Matosinhos · Confirmed</div>
+                  </div>
+                  <div style="display:flex;gap:var(--space-2);">
+                    <button class="select-btn" onclick="showToast('💬','Messaging coming in Phase 2')">Message</button>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-4);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-lg);">
+                  <div>
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:4px">🏭 Distributor</div>
+                    <div style="font-size:var(--text-xs);font-weight:700">Iberian Foods Group</div>
+                    <div style="font-size:10px;color:var(--color-text-muted)">🇵🇹 Lisboa · Negotiating</div>
+                  </div>
+                  <button class="select-btn" onclick="showToast('💬','Messaging coming in Phase 2')">Message</button>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-4);background:var(--color-surface-offset);border:1px solid var(--color-border);border-radius:var(--radius-lg);">
+                  <div>
+                    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-text-faint);margin-bottom:4px">🛒 Reseller</div>
+                    <div style="font-size:var(--text-xs);font-weight:700">Mercado Bio LDA</div>
+                    <div style="font-size:10px;color:var(--color-text-muted)">🇵🇹 Porto · Confirmed</div>
+                  </div>
+                  <button class="select-btn" onclick="showToast('💬','Messaging coming in Phase 2')">Message</button>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><span class="card-title">Partner Interest</span></div>
+              <div style="padding:var(--space-5);">
+                <div class="activity-item">
+                  <div class="activity-dot info"></div>
+                  <div class="activity-text"><span>GreenLeaf Imports</span> expressed interest in this mission</div>
+                  <div class="activity-time">Today</div>
+                </div>
+                <div class="activity-item">
+                  <div class="activity-dot info"></div>
+                  <div class="activity-text"><span>CaféEuropa SA</span> requested product samples info</div>
+                  <div class="activity-time">Yesterday</div>
+                </div>
+                <div style="margin-top:var(--space-5);">
+                  <div style="font-size:var(--text-xs);font-weight:700;margin-bottom:var(--space-3);">Supply Chain Map</div>
+                  <div style="display:flex;flex-direction:column;gap:var(--space-2);">
+                    <div style="padding:var(--space-3) var(--space-4);background:oklch(from var(--color-accent) l c h / 0.1);border-radius:var(--radius-md);font-size:var(--text-xs);border-left:3px solid var(--color-accent)">🇧🇷 Carlos Ferreira · Santos</div>
+                    <div style="text-align:center;font-size:10px;color:var(--color-text-faint)">↓ Freight · 16 days</div>
+                    <div style="padding:var(--space-3) var(--space-4);background:oklch(from var(--color-primary) l c h / 0.1);border-radius:var(--radius-md);font-size:var(--text-xs);border-left:3px solid var(--color-primary)">🇵🇹 LogPort Leixões · Matosinhos</div>
+                    <div style="text-align:center;font-size:10px;color:var(--color-text-faint)">↓ Distribution</div>
+                    <div style="padding:var(--space-3) var(--space-4);background:oklch(from var(--color-success) l c h / 0.1);border-radius:var(--radius-md);font-size:var(--text-xs);border-left:3px solid var(--color-success)">🇵🇹 Iberian Foods Group · Lisboa</div>
+                    <div style="text-align:center;font-size:10px;color:var(--color-text-faint)">↓ Retail</div>
+                    <div style="padding:var(--space-3) var(--space-4);background:oklch(from var(--color-text-muted) l c h / 0.08);border-radius:var(--radius-md);font-size:var(--text-xs);border-left:3px solid var(--color-text-faint)">🛒 Mercado Bio LDA · Porto</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: FINANCIALS -->
+        <div class="tab-panel" id="tab-financials">
+          <div class="two-col">
+            <div class="card">
+              <div class="card-header"><span class="card-title">Value Breakdown</span></div>
+              <div class="card-body">
+                <div class="value-row"><span class="value-label">Product Value (18t · Arabica)</span><span class="value-amount">€ 38,700</span></div>
+                <div class="value-row"><span class="value-label">Freight Cost (FOB · Santos)</span><span class="value-amount">€ 3,200</span></div>
+                <div class="value-row"><span class="value-label">Port & Handling Fees</span><span class="value-amount">€ 850</span></div>
+                <div class="value-row"><span class="value-label">Documentation & Compliance</span><span class="value-amount">€ 420</span></div>
+                <div class="value-row"><span class="value-label">Insurance (CIF estimate)</span><span class="value-amount">€ 390</span></div>
+                <div class="value-row" style="margin-top:var(--space-2);padding-top:var(--space-3);"><span>Total Mission Value</span><span class="value-amount" style="color:var(--color-accent)">€ 43,560</span></div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card-header"><span class="card-title">Payment Status</span></div>
+              <div class="card-body">
+                <div class="value-row"><span class="value-label">Buyer (Iberian Foods Group)</span><span class="badge progress" style="font-size:9px">Proforma Sent</span></div>
+                <div class="value-row"><span class="value-label">Advance Deposit (30%)</span><span class="value-amount" style="color:var(--color-success)">€ 11,610 ✓</span></div>
+                <div class="value-row"><span class="value-label">Balance on Delivery (70%)</span><span class="value-amount" style="color:var(--color-text-muted)">€ 27,090</span></div>
+                <div class="value-row"><span class="value-label">Payment Terms</span><span class="value-amount">30/70 · L/C</span></div>
+                <div class="value-row"><span>Estimated Net Revenue</span><span class="value-amount" style="color:var(--color-success)">€ 38,700</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: NOTES -->
+        <div class="tab-panel" id="tab-notes">
+          <div class="card">
+            <div class="card-header"><span class="card-title">Mission Notes</span><button class="topbar-btn primary" style="font-size:10px;padding:4px 12px" onclick="showToast('✅','Notes saved')">Save</button></div>
+            <div class="card-body">
+              <textarea class="notes-area">- Confirm DU-E submission with customs broker by 8 Jun
+- LogPort Leixões requested copy of phytosanitary cert — send by email
+- Iberian Foods Group: negotiate price per kilo for next season's order
+- Check cold chain requirements for any Paranaguá shipments next quarter
+- Ask CAMEX about timeline for Certificate of Origin stamp</textarea>
+              <div style="font-size:10px;color:var(--color-text-faint);margin-top:var(--space-3);">Last saved: 25 May 2026, 11:42</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- NEW MISSION MODAL -->
+<div class="modal-overlay" id="newMissionModal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Create New Mission</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-group full"><label class="form-label">Product Name</label><input class="form-input" placeholder="e.g. Arabica Coffee Beans"></div>
+        <div class="form-group"><label class="form-label">Volume (tons)</label><input class="form-input" placeholder="e.g. 18"></div>
+        <div class="form-group"><label class="form-label">Target Ship Date</label><input class="form-input" type="date"></div>
+        <div class="form-group"><label class="form-label">Origin Port</label>
+          <select class="form-input">
+            <option>Porto de Santos</option>
+            <option>Porto de Paranaguá</option>
+            <option>Porto de Rio Grande</option>
+            <option>Porto de Salvador</option>
+            <option>Porto de Manaus</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Destination Port</label>
+          <select class="form-input">
+            <option>Leixões (Matosinhos)</option>
+            <option>Lisboa (Alcântara)</option>
+            <option>Sines</option>
+            <option>Setúbal</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="topbar-btn ghost" onclick="closeModal()">Cancel</button>
+      <button class="topbar-btn primary" onclick="createMission()">Create Mission →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span class="toast-icon" id="toast-icon">✅</span>
+  <span id="toast-msg">Action completed</span>
+</div>
+
+
+<script>
+const BASE_API_URL = 'https://latam2eu.amahaskell.workers.dev';
+
+async function callApi(path, options = {}) {
+  const baseUrlInput = document.getElementById('base-url');
+  const baseUrl = baseUrlInput
+    ? baseUrlInput.value.trim().replace(/\/$/, '')
+    : BASE_API_URL;
+  const url = baseUrl + path;
+
+  const fetchOptions = {
+    method: options.method || 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers || {})
+    },
+    credentials: 'include'
+  };
+
+  if (options.body) {
+    fetchOptions.body = JSON.stringify(options.body);
+  }
+
+  const response = await fetch(url, fetchOptions);
+  const text = await response.text();
+  let data;
+  try { data = JSON.parse(text); } catch { data = { raw: text }; }
+
+  const lastRespEl = document.getElementById('last-response');
+  if (lastRespEl) {
+    lastRespEl.textContent = JSON.stringify({
+      status: response.status,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries()),
+      body: data
+    }, null, 2);
+  }
+
+  return { response, data };
+}
+</script>
+<script>
+// THEME
+(function(){
+  const t=document.querySelector('[data-theme-toggle]'),r=document.documentElement;
+  let d=r.getAttribute('data-theme')||'dark';
+  r.setAttribute('data-theme',d);
+  function icon(){if(!t)return;t.innerHTML=d==='dark'?'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>':'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';}
+  icon();
+  if(t)t.addEventListener('click',()=>{d=d==='dark'?'light':'dark';r.setAttribute('data-theme',d);icon();});
+})();
+
+// NAVIGATION
+const pages={overview:'Dashboard',missions:'All Missions',documents:'Documents',compliance:'Compliance Score',partners:'Partners',profile:'My Profile','mission-detail':'Mission #047 — Coffee Beans'};
+function navigate(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('breadcrumb-text').textContent=pages[id]||id;
+  if(el){document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));el.classList.add('active');}
+  else{document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('data-page')===id)n.classList.add('active');else n.classList.remove('active');});}
+}
+
+// TOAST
+let toastTimer;
+function showToast(icon,msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toast-icon').textContent=icon;
+  document.getElementById('toast-msg').textContent=msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// MODAL
+function openNewMission(){document.getElementById('newMissionModal').classList.add('show');}
+function closeModal(){document.getElementById('newMissionModal').classList.remove('show');}
+function createMission(){closeModal();showToast('🚀','New Mission created! Add documents to start scoring.');}
+document.getElementById('newMissionModal').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal();});
+
+// MISSION FILTER
+function filterMissions(btn,status){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.missions-full-table .mission-row:not(.header)').forEach(row=>{
+    if(status==='all')row.style.display='';
+    else row.style.display=(row.getAttribute('data-status')===status)?'':'none';
+  });
+}
+
+function openMissionDetail(){
+  navigate('mission-detail', null);
+  // highlight missions in sidebar
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    if(n.getAttribute('data-page')==='missions') n.classList.add('active');
+    else n.classList.remove('active');
+  });
+  document.getElementById('breadcrumb-text').textContent='Mission #047 — Coffee Beans';
+}
+
+function switchTab(el, panelId){
+  el.closest('.tab-bar').querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const container = el.closest('.page');
+  container.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  container.querySelector('#'+panelId).classList.add('active');
+}
+
+</script>
+
+<script>
+function applyUserToDashboard(user) {
+  const hiName = document.getElementById('dash-greeting-name');
+  if (hiName) hiName.textContent = user.full_name || user.username || 'exporter';
+
+  const pName  = document.getElementById('profile-name');
+  const pEmail = document.getElementById('profile-email');
+  const pRole  = document.getElementById('profile-role');
+
+  if (pName)  pName.textContent  = user.full_name || user.username || '—';
+  if (pEmail) pEmail.textContent = user.email || '—';
+  if (pRole && user.role) pRole.textContent = user.role;
+}
+
+async function initDashboardSession() {
+  const statusEl = document.getElementById('session-status');
+  try {
+    const result = await callApi('/me', { method: 'GET' });
+    if (result && result.data && result.data.ok && result.data.user) {
+      if (statusEl) statusEl.textContent = ' · Session active';
+      applyUserToDashboard(result.data.user);
+    } else {
+      if (statusEl) statusEl.textContent = ' · Not logged in, redirecting...';
+      setTimeout(() => { window.location.href = 'latam2eu-login.html'; }, 1200);
+    }
+  } catch (e) {
+    if (statusEl) statusEl.textContent = ' · Error, redirecting...';
+    setTimeout(() => { window.location.href = 'latam2eu-login.html'; }, 1200);
+  }
+}
+
+
+function saveProfile() {
+  const statusEl = document.getElementById('profile-save-status');
+  if (statusEl) statusEl.textContent = 'Saving...';
+  const nameEl = document.getElementById('profile-name');
+  const roleEl = document.getElementById('profile-role');
+  const companyEl = document.getElementById('profile-company');
+  const countryEl = document.getElementById('profile-country');
+  const body = {
+    full_name: nameEl ? nameEl.textContent.trim() : undefined,
+    role: roleEl ? roleEl.textContent.trim() : undefined,
+    company_name: companyEl ? companyEl.textContent.trim() : undefined,
+    country: countryEl ? countryEl.textContent.trim() : undefined
+  };
+  Object.keys(body).forEach(k => body[k] === undefined && delete body[k]);
+  callApi('/me', { method: 'POST', body }).then(result => {
+    if (result && result.data && result.data.ok) {
+      if (statusEl) statusEl.textContent = 'Saved';
+    } else if (statusEl) {
+      statusEl.textContent = 'Error saving profile';
+    }
+  }).catch(() => {
+    if (statusEl) statusEl.textContent = 'Network error';
+  });
+}
+
+const saveBtn = document.getElementById('profile-save-btn');
+if (saveBtn) {
+  saveBtn.addEventListener('click', function(e){
+    e.preventDefault();
+    saveProfile();
+  });
+}
+
+
+document.addEventListener('DOMContentLoaded', initDashboardSession);
+</script>
+
+<script>
+
+function applyUserToDashboard(user) {
+  const hiName = document.getElementById('dash-greeting-name');
+  if (hiName) hiName.textContent = user.full_name || user.username || 'exporter';
+
+  const pName  = document.getElementById('profile-name');
+  const pEmail = document.getElementById('profile-email');
+  const pRole  = document.getElementById('profile-role');
+  const pCompany = document.getElementById('profile-company');
+  const pCountry = document.getElementById('profile-country');
+
+  const eUser = document.getElementById('edit-username');
+  const eEmail = document.getElementById('edit-email');
+  const eFull = document.getElementById('edit-full-name');
+  const eRole = document.getElementById('edit-role');
+  const eCompany = document.getElementById('edit-company');
+  const eCountry = document.getElementById('edit-country');
+
+  if (pName)   pName.textContent   = user.full_name || user.username || '—';
+  if (pEmail)  pEmail.textContent  = user.email || '—';
+  if (pRole && user.role)   pRole.textContent   = user.role;
+  if (pCompany && user.company_name) pCompany.textContent = user.company_name;
+  if (pCountry && user.country)      pCountry.textContent = user.country;
+
+  if (eUser)   eUser.value   = user.username || '';
+  if (eEmail)  eEmail.value  = user.email || '';
+  if (eFull)   eFull.value   = user.full_name || '';
+  if (eRole)   eRole.value   = user.role || '';
+  if (eCompany)eCompany.value= user.company_name || '';
+  if (eCountry)eCountry.value= user.country || '';
+}
+
+async function initDashboardSession() {
+  const statusEl = document.getElementById('session-status');
+  try {
+    const result = await callApi('/me', { method: 'GET' });
+    if (result && result.data && result.data.ok && result.data.user) {
+      if (statusEl) statusEl.textContent = ' · Session active';
+      applyUserToDashboard(result.data.user);
+    } else {
+      if (statusEl) statusEl.textContent = ' · Not logged in, redirecting...';
+      setTimeout(() => { window.location.href = 'latam2eu-login.html'; }, 2000);
+    }
+  } catch (e) {
+    if (statusEl) statusEl.textContent = ' · Error, redirecting...';
+    setTimeout(() => { window.location.href = 'latam2eu-login.html'; }, 2000);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initDashboardSession);
+
+const profileForm = document.getElementById('profile-edit-form');
+if (profileForm) {
+  profileForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const status = document.getElementById('profile-save-status');
+    const full_name = document.getElementById('edit-full-name').value.trim();
+    const role      = document.getElementById('edit-role').value.trim();
+    const company   = document.getElementById('edit-company').value.trim();
+    const country   = document.getElementById('edit-country').value.trim();
+
+    const body = { full_name, role, company_name: company, country };
+
+    try {
+      const result = await callApi('/me', { method: 'POST', body });
+      if (result && result.data && result.data.ok && result.data.user) {
+        if (status) status.textContent = 'Profile updated.';
+        applyUserToDashboard(result.data.user);
+      } else if (status) {
+        status.textContent = 'Update failed: ' + (result && result.data && result.data.message || 'Unknown error');
+      }
+    } catch (err) {
+      if (status) status.textContent = 'Network error: ' + err.message;
+    }
+  });
+}
+
+    document.getElementById('logout-btn').addEventListener('click', async function () {
+      const result = await callApi('/logout', {
+        method: 'POST'
+      });
+      if (result && result.data && result.data.ok) {
+        showStatus('Logout OK', true);  
+      } else if (result && result.data) {
+        showStatus('Logout failed: ' + (result.data.message || 'Unknown error'), false);
+      }
+		initDashboardSession();
+    });
+
+</script>
+</body>
+</html>
